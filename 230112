@@ -1,0 +1,59 @@
+<프로그래머스 2단계 두수 합 같게 만들기.java>
+두  큐에 있는 원소의 합이 같다 ==  한쪽큐를  원소의합/2 만 만들면된다.
+즉, 큐 1의 모든 원소를 전체합/2 를 만드는걸 목표로 두고,   큐2를 원소를 교체할수있는 교체박스라고 생각하고 짜보자.
+예시를 들어보자,  만약 두 큐의 모든 원소의합이 30이면,
+큐1의 원소합을 15만 맞추는걸 목표로만 하면된다. 
+만약 큐1의 원소합이 15보다 작으면  큐 2에서 원소를 뽑아와 더해주면되고,
+원소합이 15보다 크면  큐1에서 원소를뽑아  큐2에다가 넣어주면된다.
+마치 ,전체합/2를 기준으로 UP 앤 DOWN 게임을 하면된다.
+또한,  원소의합이 같지 않는경우는 return -1를하는 특수예외조건이 존재한다.
+모~든 큐1의값과 큐2의 값을 교체하는 횟수는  초기 큐.size()*3을넘지 않는다.
+MaxCount로 설정하고 Count가넘으면 return -1로 반환을해주자.
+
+import java.util.*;
+class Solution {
+    public int solution(int[] queue1, int[] queue2) {
+          
+        Queue<Integer> que1 = new LinkedList<>();
+        Queue<Integer> que2 = new LinkedList<>();
+        
+        long total=0;
+        long hap=0;
+        for(int i=0;i<queue1.length;i++){
+            total+=queue1[i];
+            hap+=queue1[i];
+            total+=queue2[i];
+            que1.add(queue1[i]);
+            que2.add(queue2[i]);
+        }
+        
+        int maxCount=queue1.length*3;
+        total/=2;
+        
+        // 두 큐 합을 같게만든다 == 한쪽만 전체합/2를 만들어도댄다.
+        // 즉, 큐 1번을 기준으로두고  큐2번을 교체파츠로 보겠다
+        
+        while(hap!=total){
+            
+            if(maxCount==0){
+                return -1;
+            }
+            
+            if(hap>total){
+               int temp1=que1.poll();
+               hap-=temp1;
+               que2.add(temp1);
+            }
+            else{
+               int temp2=que2.poll();
+                hap+=temp2;
+                que1.add(temp2);
+            }
+            
+            maxCount--;
+        }
+        
+        
+        return queue1.length*3-maxCount;
+    }
+}
