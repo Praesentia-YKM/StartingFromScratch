@@ -60,6 +60,31 @@ class Solution {
 
 
 <프로그래머스 2단계 주차요금계산 > -hashmap사용
+HashMap은 Map 인터페이스를 구현한 대표적인 Map 컬렉션입니다. Map 인터페이스를 상속하고 있기에 Map의 성질을 그대로 가지고 있습니다.
+Map은 키와 값으로 구성된 Entry객체를 저장하는 구조를 가지고 있는 자료구조입니다. 여기서 키와 값은 모두 객체입니다. 
+값은 중복 저장될 수 있지만 키는 중복 저장될 수 없습니다. 만약 기존에 저장된 키와 동일한 키로 값을 저장하면 기존의 값은 없어지고 새로운 값으로 대치됩니다.
+HashMap은 이름 그대로 해싱(Hashing)을 사용하기 때문에 많은 양의 데이터를 검색하는 데 있어서 뛰어난 성능을 보입니다.
+
+##HashMap에 값을 추가하려면 put(key,value) 메소드를 사용하면 됩니다.##
+선언 시 HashMap에 설정해준 타입과 같은 타입의 Key와 Value값을 넣어야 하며 만약 입력되는 키 값이 HashMap 내부에 존재한다면 기존의 값은 새로 입력되는 값으로 대치됩니다.
+map.put(1,"사과"); //값 추가
+map.put(2,"바나나");
+map.put(3,"포도");
+
+##HashMap에 값을 제거하려면 remove(key) 메소드를 사용하면 됩니다. ##
+오직 키값으로만 Map의 요소를 삭제할 수 있습니다. 모든 값을 제거하려면 clear() 메소드를 사용하면 됩니다.
+HashMap<Integer,String> map = new HashMap<Integer,String>(){{//초기값 지정
+    put(1,"사과");
+    put(2,"바나나");
+    put(3,"포도");
+}};
+map.remove(1); //key값 1 제거
+map.clear(); //모든 값 제거
+
+
+
+
+
 import java.util.*;
 class Solution {
     public int[] solution(int[] fees, String[] records) {
