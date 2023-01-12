@@ -82,7 +82,11 @@ map.remove(1); //key값 1 제거
 map.clear(); //모든 값 제거
 
 
-
+##해쉬맵 출력##
+//KeySet() 활용
+for(Integer i : map.keySet()){ //저장된 key값 확인
+    System.out.println("[Key]:" + i + " [Value]:" + map.get(i));
+}
 
 
 import java.util.*;
