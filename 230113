@@ -1,0 +1,18 @@
+<SpringMVC View패턴에 대한 깊은 이해>
+FrontController도입 전에는 컨트롤러마다 클라이언트의 요청을 받고 호출하는 메서드를
+각각 로직설계를 했어야했다. 하지만 이는 분명 공통 부분이 존재하기 마련이다.
+이러한 공통부분 설계를 줄이기위해 FrontController를 도입하였다.
+FrontController는 다음과 같은 특징을 갖는다.
+  #프론트 컨트롤러 서블릿 하나로 클라이언트의 요청을 받음
+  #프론트 컨트롤러가 요청에 맞는 컨트롤러를 찾아서 호출
+  #입구를 하나로!
+  #공통 처리 가능
+  #프론트 컨트롤러를 제외한 나머지 컨트롤러는 서블릿을 사용하지 않아도 됨
+  #스프링 웹 MVC의 핵심도 바로 FrontController -> 스프링 웹 MVC의 DispatcherServlet이 FrontController 패턴으로 구현되어 있음
+ 
+이렇게 설계를 해도 컨트롤러마다 jsp를 렌더링하는 공통 로직이 존재하기 마련이다. 이런 부분은
+view클래스를 설계하여 공통으로 뺀다. 
+그럼 클라이언트가 HTTP요쳥을 FrontController로 보내고 FrontController는 url매핑 정보를 확인하여 컨트롤러를 조회한다.
+다음으로 알맞은 컨트롤러를 호출하고 컨트롤러에서는 MyView객체를 return한다.
+url정보가 담긴 리턴된 myView객체는 render클래스를 실행하며 view로직이 실행되면서 jspForward가 진행된다.
+그리고 마지막으로 HTML 응답으로 마무리된다.
