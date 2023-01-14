@@ -19,3 +19,20 @@ String 클래스와 같은 불변 클래스는 StringBuffer 클래스의 append(
 <append() 메소드>
 append() 메소드는 인수로 전달된 값을 문자열로 변환한 후, 해당 문자열의 마지막에 추가합니다.
 이 메소드는 String 클래스의 concat() 메소드와 같은 결과를 반환하지만, 내부적인 처리 속도가 훨씬 빠릅니다.
+
+
+ex)
+StringBuffer sb = new StringBuffer();  // StringBuffer 객체 sb 생성
+sb.append("hello");
+sb.append(" ");
+sb.append("jump to java");
+String result = sb.toString();
+System.out.println(result);  // "hello jump to java" 출력
+
+StringBuffer VS String
+
+String result = "";
+result += "hello";
+result += " ";
+result += "jump to java";
+System.out.println(result);  // "hello jump to java" 출력
