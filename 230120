@@ -142,3 +142,4 @@ public class user_dto {
 ArrayList<Integer> list1 = new ArrayList<Integer>();
 ArrayList<String> list2 = new ArrayList<>(); // 타입 생략 가능
 ArrayList<Product> pList = new ArrayList<>(); // 타입으로 클래스도 가능
+선언 시 자료의 안정성을 위해 제네릭(Generic) 방식으로 타입을 미리 지정해주어 같은 타입의 객체들만 리스트에 추가가 가능합니다.
