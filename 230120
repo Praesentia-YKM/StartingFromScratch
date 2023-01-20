@@ -138,3 +138,7 @@ public class user_dto {
         this.email = email;
     }
 }
+
+ArrayList<Integer> list1 = new ArrayList<Integer>();
+ArrayList<String> list2 = new ArrayList<>(); // 타입 생략 가능
+ArrayList<Product> pList = new ArrayList<>(); // 타입으로 클래스도 가능
