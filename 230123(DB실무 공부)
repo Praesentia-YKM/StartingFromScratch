@@ -1,0 +1,180 @@
+# Database실무
+
+## database란?
+
+---
+
+<aside>
+🤔 전자적으로 저장되고 사용되는 관련있는 데이터들의 조직화된 집합
+
+</aside>
+
+## DBMS란?
+
+---
+
+<aside>
+🤔 (DataBase Management Systems) 사용자에게 DB를 정의하고 만들고 관리하는 기능을 제공하는 소프트웨어 시스템
+
+</aside>
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c24cfb63-3db7-4476-9b57-790a97a14aaa/Untitled.png)
+
+## metadata란?
+
+---
+
+<aside>
+🤔 Data About Data → 데이터를 설명하기위한 데이터 (ex. 사진에대한 정보들)
+
+데이터 유형, 구조, 제약조건, 보안, 저장, 인덱스 ,사용자그룹 ..이러한 metadata또한 DBMS를 통해 저장/관리된다.
+
+</aside>
+
+## database system
+
+---
+
+<aside>
+🤔 database + DBMS + 연관된 applications 을 통틀어서 일컷는 말
+줄여서 database라고도 함(순수하게 데이터만을 나타내는 database인지 아니면 database system을 의미하는지 잘 판단해야함)
+
+</aside>
+
+## 쿼리 query
+
+---
+
+<aside>
+🤔 database에 접근해서 원하는 데이터를 가져오거나 원하는 형태로 데이터를 수정하는 그러한 요청
+
+</aside>
+
+## database system구조
+
+---
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ec8de302-0a13-44a2-95a7-4f3d05059169/Untitled.png)
+
+사용자가 쿼리를 날림 → dbms가 그쿼리를 받아서 뭘 요청하는건지 분석 → 요청을 처리하기위해 요청된 데이터의 메타데이터를 확인 → 그 메타데이터를 바탕으로 요청받은 데이터베이스에 접근 → 요청에 대한 응답을 리턴
+
+## data models란?
+
+---
+
+<aside>
+🤔 DB의 구조를 기술하는데 사용될 수 있는 개념들이 모인 집합
+DB구조를 추상화해서 표현할 수 있는 수단을 제공한다.
+
+</aside>
+
+DB의 구조를 를 원하는 추상화 수준과 원하는 구조로 모델링하기 위한 수단이 data model이다.
+
+!! DB구조 : 데이터유형, 데이터 관계, 제약사항 등등
+
+- 종류
+    - conceptual data models
+        - 일반 사용자들이 쉽게 이해할 수 있는 개념들로 이루어진 모델
+        - 추상화 수준이 가장 높음(누가봐도 이해할 수 있게)
+        - 비지니스 요구사항을 추상화하여 기술할 때 사용
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/028bf902-07c2-4f4c-b0f3-f4d4ad73b626/Untitled.png)
+        
+        - [ ]  구조를 엔티티와 그 엔티티들과의 관계로 모델링한것 → ERD
+    - logical data models
+        - 이해하기 어렵지 않으면서도 디테일하게 DB를 구조화 할 수 있는 개념들을 제공
+        - 데이터가 컴퓨터에 저장될 때의 구조와 크게 다르지 않게 DB 구조화를 가능하게 함(디테일)
+        - 특정 DBMS나 storage에 종속되지 않는 수준에서 DB를 구조화할 수 있는 모델
+        
+        relational data model를 가장 많이 쓰임 ( oracle, mysql 등등 다 relational datamodel을 기반한 DBMS이다)
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/09c5bbc6-c360-4375-8775-326a08be1094/Untitled.png)
+        
+        데이터를 테이블 형태로 저장하게 되고 (테이블에 row가 있고 column이 있다) 이 테이블을 relational이라고 부른다.
+        
+    - physical data models
+        - 컴퓨터에 데이터가 어떻게 파일 형태로 저장되는지를 기술할 수 있는 수단을 제공
+        - data format, data orderings, access path 등등
+        - access path : 데이터 검색을 빠르게 하기 위한 구조체
+
+## database schema ( 스키마 ) 란?
+
+<aside>
+🤔 data model을 바탕으로 database의 구조를 기술한 것
+
+</aside>
+
+스키마는 database를 설계할 때 정해지며 한번 정해진 후에는 자주 바뀌지 않는다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/47b82bdf-7e08-4162-b4eb-d9f57871580a/Untitled.png)
+
+⇒ DB이름, 그 DB에 해당하는 어트리뷰트(속성)
+
+## database state
+
+---
+
+<aside>
+🤔 특정 시점에 database에 있는 데이터를 database state 혹은 database snapshot이라고 한다.
+or database에 있는 현재 instances의 집합이라고 한다.
+
+</aside>
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/72e55c60-12ff-4989-86d7-fc74270cd1f8/Untitled.png)
+
+## three-schema architecture(안정적으로 database system을 운영하기 위한 아키텍처)
+
+---
+
+<aside>
+🤔 database system을 구축하는 architecture 중의 하나로 user application으로부터 physical database를 분리시키는 목적
+
+</aside>
+
+세가지 level이 존재하며 각각의 level마다 schema가 정의되어 있다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7603b730-4d6d-44cb-b0d5-33d3be111f5e/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cc431498-e4ba-405d-b2b6-8766da0d7b90/Untitled.png)
+
+- internal schema ( 내부 스키마 )
+    - [ ]  물리적으로 데이터가 어떻게 저장되는지
+    - physical data model을 통해 표현
+    - data storage , data structure , access path 등등 실체가 있는 내용 기술
+- external schema ( 외부 스키마 )
+    - [ ]  특정 유저들이 필요로 하는 데이터만 표현, 그 외 알려줄 필요가 없는 데이터는 숨김
+    - logical data model을 통해 표현
+    - external views, user views 라고도 불림
+- conceptual schema
+    - [ ]  전체 database에 대한 구조를 논리적으로 기술, 물리적인 저장 구조에 관한 내용은 숨김
+    - entities, data types , relationships, user operations, constraints에 집중
+    - logical data model을 통해 기술
+
+## data definition language ( DDL )
+
+---
+
+- [ ]  conceptual schema를 정의하기 위해 사용되는 언어( 가끔 internal schema까지 정의할 수 있는 경우도 있음 )
+
+## storage definition language( SDL )
+
+---
+
+- [ ]  internal schema를 정의하는 용도로 사용되는 언어
+- 요즘은 특히 relational DBMS에서는 SDL이 거의 없고 파라미터 등의 설정으로 대체됨
+
+## view definition language( VDL )
+
+---
+
+- [ ]  external shemas를 정의하기 위해 사용되는 언어
+- 대부분의 DBMS에서는 DDL이 VDL역할까지 수행
+
+## data manipulation language( DML )
+
+---
+
+- [ ]  database에 있는 data를 활용하기 위한 언어
+- data 추가, 삭제 , 수정 , 검색 등등의 기능을 제공하는 언어
+
+⇒ 이러한 다양한 언어들이 따로따로 존재하는게 아니고 하나의 통합된 언어로 존재 ex)  SQL
