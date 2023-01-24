@@ -229,3 +229,106 @@ Q: %로 시작하거나 _ 로 끝나는 프로젝트 이름을 찾고 싶다면?
 ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1f2b636b-becd-4db6-9436-4a1af5ec6b15/Untitled.png)
 
 ⇒ 백슬래쉬다음 %나 _ 는 특별한 의미가 아닌 본연 글자 그대로의 의미로 사용할 수 있게 해준다!
+
+- [ ]  SELECT, INSERT, UPDATE, DELETE에 포함된 query
+- [ ]  반드시 ()안에 기술된다.
+
+Q: ID가 14인 임직원보다 생일이 빠른 임직원의 ID, 이름, 생일을 알고싶다.
+
+1. ID가 14인 임직원 찾기
+2. 그 직원의 생일보다 생일이 빠른 사람의 정보를 알아내야함
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/718db596-604c-4051-ac87-cc46b808a4a7/Untitled.png)
+
+Q: ID가 1인 임직원과 같은 부서, 같은 성별인 임직원들의 ID와 이름과 직운을 알고싶다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fe2783e1-cac5-4c91-a677-cad485150157/Untitled.png)
+
+Q: ID가 5인 임직원과 같은 프로젝트에 참여한 임직원들의 ID를 알고싶다.
+
+1. ID가 5인 임직원이 참여한 프로젝트가 무엇인지
+2. 그 프로젝트에 참여한 임직원들의 ID를 알아내야함
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f2150653-8c82-484e-b52e-0d3193d94941/Untitled.png)
+
+⇒ IN을 사용해서 줄여보기(OR로 섞인건 묶을 수 있음)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1465f405-20ca-4adb-93f6-67aa95288b0d/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b0b033d2-9f7e-49b4-b193-d2caa36c4a0e/Untitled.png)
+
+⇒ 최종!
+
+### ?????? 근데????여기서 ID가 5인 임직원과 같은 프로젝트에 참여한 임직원들의 ID와 이름을 알고싶다면??
+
+> 우리는 임직원들의 ID까지는 구했다 이제 이 결과를 다시 employee테이블과 연결시켜주면 된다!
+> 
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/29d34e87-e437-4be4-b075-5befa4485d2d/Untitled.png)
+
+서브쿼리를 통해 구한 결과를 바탕으로 employee테이블을 조회해서 id가 1~ 14에 해당되면 id와 name조회
+
+다른형태로는
+
+(where위치에 있던 서브쿼리가 from위치에 서브쿼리가 들어갈 수도 있다)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2047463e-a0aa-412f-a1aa-1fbdd8dcac3a/Untitled.png)
+
+Q: ID가 7 혹은 12인 임직원이 참여한 프로젝트의 ID과 이름을 알고싶다.( IN이 아닌 EXISTS사용해보기)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3fb1a534-7779-4320-9cad-bf40c6730109/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e7a6ffbf-7f9c-424e-b1e3-7ff4fbfa9af5/Untitled.png)
+
+같은 문제 IN으로도 바꾸기 가능
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fc4ec076-c928-4a0e-87b3-89481b7d6356/Untitled.png)
+
+Q: 2000년대생이 없는 부서의 ID와 이름을 알고싶다
+
+(NOT EXISTS)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1e1da55c-da4b-41e6-802b-e4ca6583f2d7/Untitled.png)
+
+서브쿼리를 실행할때 아무것도 가져오는게 없으면 그 부서에는 2000년대생이 없는거니까 NOT EXISTS가 TRUE가 되므로 외부 SELECT실행!!
+
+마찬가지로 같은 문제를 NOT IN으로 바꿀 수 있따!!
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b8e0cfee-b931-4624-a3b9-1548361e3531/Untitled.png)
+
+Q: 리더보다 높은 연봉을 받는 부서원을 가진 리더의 ID와 이름과 연봉을 알고싶다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fc8367f1-0b33-48d4-8afb-da2be11849e8/Untitled.png)
+
+리더인지 아닌지의 여부를 알기위해 department테이블도 조회
+
+리더와 같은 부서인지 우선 서브쿼리를 통해 조회하고, ANY를 통해 서브쿼리가 반환한 결과들 중에 단 하나라도 salary보다 크면 t그 사람의 id와 이름과 연봉을 반환!
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3dcdbba5-9a17-4211-94b5-cf1a70e9ea8a/Untitled.png)
+
+????그리고 위 문제의 반환값에 대해 그럼 그 사람이 속한 부서의 최고 연봉은 얼마야?
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e0905d18-0c93-4bdb-bd12-49f23e4d21cb/Untitled.png)
+
+⇒ 여기에 서브쿼리를 하나 더 둔다
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/750c509e-4bc4-4390-bbed-e18df40ae53d/Untitled.png)
+
+select절과 from절에 각각 서브쿼리가 추가될 수 있따.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/416a6ba3-2839-47a7-b1c1-741f1fc099ca/Untitled.png)
+
+Q: ID가 13인 임직원과 한번도 같은 프로젝트에 참여하지 못한 임직원들의 ID, 이름, 직군을 알고싶다.
+
+---
+
+1. ID가 13인 임직원이 참여한 프로젝트를 구한다.
+2. 그 프로젝트 정보를 가지고 한번도 참여하지 못한 임직원들 정보를 구한다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/96095952-06f5-4488-abcd-36e212e3fff3/Untitled.png)
+
+한번도 참여하지 못한 임직원 정보를 알기위해 조회된 프로젝트ID서브쿼리에 단 하나라도 같은게 없어야 해서 <> ALL을 사용
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0fdc1f19-7cbb-4ae1-9d81-b100034ba7ff/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/79eb87aa-01b4-40cc-a66a-6cacbe92bd47/Untitled.png)
