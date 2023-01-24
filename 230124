@@ -27,3 +27,12 @@ view.render(mv.getModel(), request, response)
 JSP는 request.getAttribute() 로 데이터를 조회하기 때문에, 모델의 데이터를 꺼내서
 request.setAttribute() 로 담아둔다.
 JSP로 포워드 해서 JSP를 렌더링 한다.
+
+< HeidiSQL > 
+HeidiSQL을 사용하는 이유
+HeidiSQL을 통해 세션을 만들고 로컬이나 원격 서버에 접속하고, 접속된 데이터 서버 내의 데이터베이스를 관리할 수 있습니다. 
+GUI 환경을 제공하기 때문에 테이블을 시각화해서 보기 편하고, 툴 안에서 SQL문을 사용하지 않더라도 마우스를 통해 많은 작업을 수행할 수 있습니다.
+HeidiSQL 하나만 있어도 MariaDB, MySQL, Microsoft SQL, PostgreSQL, SQLite 등의 데이터베이스 시스템을 실행하는 컴퓨터에 접속해서 데이터 구조를 보고 편집할 수 있습니다. 
+물론 각 DBMS에서도 GUI 환경을 제공하는 도구를 사용할 수 있습니다. 다만 HeidiSQL은 하나의 툴로도 위에서 언급한 RDBMS를 모두 관리할 수 있습니다. 
+하나의 창에서 여러 서버에 연결도 가능합니다.
+오픈 소스로 제공되기 때문에 무료로 사용할 수 있는 장점이 있습니다. 전 세계적으로 가장 널리 사용되는 데이터베이스 관리 도구입니다.
