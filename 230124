@@ -36,3 +36,138 @@ HeidiSQL 하나만 있어도 MariaDB, MySQL, Microsoft SQL, PostgreSQL, SQLite �
 물론 각 DBMS에서도 GUI 환경을 제공하는 도구를 사용할 수 있습니다. 다만 HeidiSQL은 하나의 툴로도 위에서 언급한 RDBMS를 모두 관리할 수 있습니다. 
 하나의 창에서 여러 서버에 연결도 가능합니다.
 오픈 소스로 제공되기 때문에 무료로 사용할 수 있는 장점이 있습니다. 전 세계적으로 가장 널리 사용되는 데이터베이스 관리 도구입니다.
+
+
+SQL이란?
+
+---
+
+<aside>
+🤔 Structured Query Language
+# 현업에서 쓰이는 관계형 DBMS의 표준언어
+# 종합적인 database언어 → DDL + DML + VDL 
+# RDBMS의 표준언어지만 실제 구현에 강제가 없기 떄문에 RDBMS마다 제공하는 SQL의 스펙이 조금씩 다르다(mysql , oracle , …sql을 사용하지만 다 문법이 조금씩 다름)
+
+</aside>
+
+SQL 주요 용어
+
+---
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/50563b76-b918-4b09-9d81-c6e27ba90dec/Untitled.png)
+
+SQL에서 relation이란?
+
+---
+
+⇒ multiset of tuple 즉, 중복된 tuple을 허용한다.
+
+- MariaDB SQL문법 사용
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c80da170-4ec0-429b-9813-2b29ea38525d/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/db9e1c9b-d794-4478-907d-bd40c998f3a7/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cc8586d8-c4e1-4a02-bc6b-517826b04501/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/38aa1583-5691-48b7-be13-6dcd3646519c/Untitled.png)
+    
+    <aside>
+    🤔 MySQL에서는 데이터베이스와 스키마가 같은 뜻을 의미.
+     CREATE DATABASE DB명 = CREATE SCHEMA DB명 
+    같은 의미의 명령어를 지닌다.
+    
+    * MYSQL이 아닌 다른 RDBMS에는 의미가 다를 수 있다.
+    
+    </aside>
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5c747f75-f343-44aa-b5f9-30ee88b104de/Untitled.png)
+    
+    ## Attribute data type : 숫자
+    
+    ---
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d7ce4b8a-e040-4e74-909b-12c748a59389/Untitled.png)
+    
+    ## Attribute data type : 문자열
+    
+    ---
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/30fec0ac-f323-422c-839b-db890af45f96/Untitled.png)
+    
+    ## Attribute data type : 날짜와 시간
+    
+    ---
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/869de52c-0fed-4821-b6ca-4375b7f7ad1a/Untitled.png)
+    
+    UTC : 표준 시간대
+    
+    ## Attribute data type : 그 외
+    
+    ---
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d9934373-fe24-40e1-8c33-3feb4ab3ddd4/Untitled.png)
+    
+    ## Key constraints
+    
+    ---
+    
+    - PRIMARY KEY
+        - TABLE의 튜플을 식별하기 위해 사용, 하나 이상의 애트리뷰트로 구성
+        - 중복된 값을 가질 수 없다. NULL값도 가질 수 없다.
+        
+        - [ ]  선언방법
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/77945432-359f-43e3-a23e-b00e68fa6b6d/Untitled.png)
+            
+    - UNIQUE KEY
+        - UNIQUE로 지정된 애트리뷰트는 중복된 값을 가질 수 없다.
+        - 단, NULL은 중복을 허용할 수도 있다(RDBMS마다 다름)
+        
+        - [ ]  선언방법
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/885f8c5f-afc0-40d5-9c92-6a608ae41294/Untitled.png)
+            
+        
+    - NOT NULL
+        - 애트리뷰트가 NOT NULL로 지정되면 해당 애트리뷰트는 NULL을 값으로 가질 수 없다.
+        
+        - [ ]  선언방법
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d7ef3e46-4819-450b-97b8-7c1c14a41359/Untitled.png)
+            
+    - FOREIGN KEY
+        - 애트리뷰트가 다른 TABLE의 PRIMARY KEY나 UNIQUE KEY를 참조할 때 사용(반드시 존재하는 값이여야 함)
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0b17d3e3-edf4-4438-8392-f96d7f640a06/Untitled.png)
+            
+        
+        - [ ]  선언방법
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6078782c-b07d-4604-9d24-373532f77d02/Untitled.png)
+            
+            참조하는 값이 삭제/변경 될때의 옵션을 지정해줘야 함
+            
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6f2bfd84-4f3b-48ee-ab01-0c9904063383/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9257bbe7-d89e-447b-9204-bd3bcbbb3243/Untitled.png)
+    
+    ## DEFAULT constraints
+    
+    ---
+    
+     : 새로운 튜플을 저장할 때 해당 애트리뷰트에 대한 값이 없다면 DEFAULT로 저장
+    
+    ## CHECK constraints
+    
+    ---
+    
+    : 애트리뷰트의 값을 제한하고 싶을 때 사용( ex. 최소연봉 5천이상)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3169050c-93cb-4ca3-9cce-a98561b4ba9c/Untitled.png)
+    
+    - [ ]  선언방법
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9a95dc7f-f0e7-4780-870c-0c5c3fd932ed/Untitled.png)
