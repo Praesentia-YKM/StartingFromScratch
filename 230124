@@ -171,3 +171,61 @@ SQL에서 relation이란?
     - [ ]  선언방법
         
         ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9a95dc7f-f0e7-4780-870c-0c5c3fd932ed/Untitled.png)
+
+## SELECT
+
+---
+
+Q: project 2002를 리딩(leading)하고 있는 임직원의 ID와 이름과 직군을 알고싶다
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e42cd589-8b67-4457-8c98-f0c37d5b7b05/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bed517fe-8f83-44f5-81cb-38bedfd27864/Untitled.png)
+
+⇒ 둘중 어떤 id를 말하는지 모르는 경우 테이블명.id로 구분하기
+
+## AS
+
+---
+
+⇒ 또는 AS를 써서 별칭을 지정해서 쓰기
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fa959673-d508-438d-8fe8-719d0bc12cca/Untitled.png)
+
+⇒ 테이블이나 애트리뷰트에 as를 통해 별칭부여 가능!
+
+## DISTINCT
+
+---
+
+- [ ]  SELECT결과에서 중복되는 튜플을 제외하고 싶을때 사용
+
+Q: 디자이너들이 참여하고 있는 프로젝트의 ID와 이름을 알고싶다.(join을 써도 되지만 reference만 활용해서 작성)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/65ff4816-7e6d-43e7-bd36-40592bce89ca/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/61b711a4-2f51-4920-afc9-eae5f89bb0b1/Untitled.png)
+
+⇒ 어? 2003 중복된 튜플이 있네?
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4d1bfc0e-2e24-4c95-a0b1-b9138abbcc50/Untitled.png)
+
+## LIKE
+
+---
+
+- [ ]  문자열 pattern matching에 사용
+
+Q: 이름이 N으로 시작하거나 N으로 끝나는 임직원들의 이름을 알고싶다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/54ed6f3c-542b-42c4-9ae5-ea7be32384fc/Untitled.png)
+
+Q: 이름이 J로 시작하는, 총 네글자의 이름을 가지는 임직원들의 이름을 알고싶다
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7c754326-6d6d-4047-80e6-802cf589fa84/Untitled.png)
+
+Q: %로 시작하거나 _ 로 끝나는 프로젝트 이름을 찾고 싶다면?
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1f2b636b-becd-4db6-9436-4a1af5ec6b15/Untitled.png)
+
+⇒ 백슬래쉬다음 %나 _ 는 특별한 의미가 아닌 본연 글자 그대로의 의미로 사용할 수 있게 해준다!
