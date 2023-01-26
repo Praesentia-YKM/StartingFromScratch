@@ -113,3 +113,18 @@
     - 책(선택) : 고객이 구매하지 않은 책이 존재할수 있다
     
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cedea153-3e58-4932-bc19-3643bc291c99/Untitled.png)
+    
+    - [ ]  **2.3 분석한 내용으로 ERD 생성하기**
+    
+    <aside>
+    💡 객체, 관계 정리만 잘 되면 쉽게 ERD를 만들어볼 수 있습니다. 추출한 내용을 가지고 릴레이션 스키마를 바로 생성할 수도 있지만, 다이어그램으로 다시 정리하면 큰 그림을 보면서 더 쉽게 전체 모델을 이해할 수 있는 장점이 있습니다.
+    
+    </aside>
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b5080ef3-575f-4eb7-b8d2-968d77165872/Untitled.png)
+    
+    ### ERD
+    
+    ---
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/090a277d-1fa3-42ae-9110-240899f747e6/Untitled.png)
