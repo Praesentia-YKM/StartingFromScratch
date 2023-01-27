@@ -35,3 +35,27 @@ Autowired란
         생성자
         setter
         필드
+
+#의존성주입 실패경우
+1) 해당 타입의 빈이 없는 경우
+  import org.springframework.beans.factory.annotation.Autowired;
+  import org.springframework.stereotype.Service;
+
+  @Service
+  public class BookService {
+
+      BookRepository bookRepository;
+
+      @Autowired
+      public BookService(BookRepository bookRepository) {
+          this.bookRepository = bookRepository;
+      }
+  }
+생성자에 대해 Autowired 어노테이션이 있는 상태이다. BookRepository가 빈으로 등록되어 있지 않다고 가정하면 생성자에서 에러가 발생한다. 
+이유는 Autowired가 의존성을 주입하기 위해서는 빈이 등록되어 있는 객체중에서 찾는데 BookRepository라는 객체는 빈으로 등록되어 
+있지 않기 때문에 의존성 주입에 실패해서 에러가 발생한다. (Autowired의 기본값이 true이기 때문이다)   
+
+
+
+2) 
+ 
