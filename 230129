@@ -1,0 +1,99 @@
+## join
+
+## join이란
+
+---
+
+- [ ]  두 개 이상의 table들에 있는 데이터를 한번에 조회하는 것
+- 암시적 조인
+- 명시적 조인
+
+## 암시적 조인(implicit join)
+
+---
+
+<aside>
+🤔 다른 테이블의 컬럼을 사용함으로써 조인을 하는 방식
+⇒ 1992년에 폐기된 표현방법이지만 아직 문법적 지원은 하고 있는 상태다.
+
+</aside>
+
+- FROM절에는 TABLE만 나열하고 WHERE절에 JOIN조건을 명시하는 방식
+
+- [ ]  ID가 1인 임직원이 속한 부서 이름은?
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/145daf16-03a6-4837-8ad1-824e04fcb85d/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1af0734d-04f2-4736-862d-6a7f8a661654/Untitled.png)
+    
+
+## 명시적 조인(explicit join)
+
+---
+
+<aside>
+🤔 FROM절에 join키워드와 함께 joined table들을 명시하는 방식
+FROM절에서 ON뒤에 join condition이 명시된다.
+
+</aside>
+
+- 가독성이 좋다.
+- 복잡한 join쿼리 작성 중에도 실수할 가능성이 적다.
+
+## INNER JOIN
+
+---
+
+<aside>
+🤔 두 TABLE에서 JOIN조건을 만족하는 TUPLE들로 RESULT TABLE을 만드는 JOIN
+# FROM table1 [INNER] JOIN table2 ON join_condition
+
+</aside>
+
+- join condition에 사용가능한 연산자 : 비교연산자(= , < , >  ≠ …)
+- join condition에서 NULL값을 가지는 tuple은 result table에 포함되지 못한다.
+- JOIN명령어의 기본값은 INNER JOIN이다
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0c5846a9-197e-48df-866e-615b1d59b8e6/Untitled.png)
+
+⇒ 결과를 한번 보자! (SIMON의 결과가 없음을 알 수 있다)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/79207f1b-821a-4967-9a66-4df8ccc27a6b/Untitled.png)
+
+⇒ null값을 가지는 tuple은 포함될 수 없다. NULL과 비교연산을 하면 UNKNOWN이 되기떄문에 inner조건에서true값이 반환되지 않아서 결과가 빠지게 된다.
+
+## OUTER JOIN
+
+---
+
+<aside>
+🤔 두 table에서 join condition을 만족하지 않는 tuple들도 result table에 포함하는 join
+* LEFT JOIN
+* RIGHT JOIN
+* FULL JOIN
+
+</aside>
+
+- LEFT JOIN
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3128f4f6-6b2b-4f4b-9841-285b973eaec3/Untitled.png)
+    
+    ⇒ 조회결과가 어떻게 될까? ( SIMON이 포함되게 된다. 하지만 LEFT OUTER조인이라 D.NAME에 HR은 누락이 되게 된다.)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/476de8c8-5b07-4188-9c57-8438cf9e4f22/Untitled.png)
+    
+- RIGHT JOIN
+    
+    <aside>
+    🤔 JOIN 조건에 의하여 매칭된 튜플들 뿐만 아니라, 매칭되지 못한 RIGHT TABLE의 모든 튜플들도 가지고 온다.
+    
+    </aside>
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ec819ca4-161c-418f-a0f4-ef19101b8265/Untitled.png)
+    
+    ⇒ 조회결과를 보면 RIGHT OUTER JOIN은 D.NAME에서 HR이 조회 결과에 포함됨을 알 수 있다.하지만 SIMON은 누락된다.
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/aa30977c-6bda-47db-b1fc-a49fea70ed32/Untitled.png)
+    
+
+## USING
