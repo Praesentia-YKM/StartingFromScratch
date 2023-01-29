@@ -83,6 +83,39 @@ FROM절에서 ON뒤에 join condition이 명시된다.
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/476de8c8-5b07-4188-9c57-8438cf9e4f22/Untitled.png)
     
 - RIGHT JOIN
+
+## three-valued logic(NULL값에 대한 처리)
+
+- [ ]  SQL에서 NULL의 의미
+    - 모르는 값( unknown)
+    - 이용불가능한 값( 민감정보 unavailable)
+    - 적용 불가능한 값( 폰번호 저장하려하는데 집에 폰이 없다 not applicable)
+    
+
+## IS NULL
+
+---
+
+- [ ]  employee테이블에서 birth_date값이 NULL인 컬럼 조회하는 법
+    - SELECT id FROM employee WHRE birth_date = NULL ;
+        
+        XXXXXXXXX이러면 안된다!! XXXXXXXXXX
+        
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0bde1505-5d93-42d2-984f-704fb6884c85/Untitled.png)
+    
+
+## SQL에서 NULL과 비교연산을 하게되면 결과는?
+
+---
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/386a23dc-b0a3-45a5-b3e2-14e8dd1d4e53/Untitled.png)
+
+⇒ UNKNOWN이라고 한다. 왜냐하면 NULL은 값을 아직 모르는거지 내가 원하는 값일 수도 있기 때문이다. 
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0da944e2-e5ac-4872-a014-c15aa3eeb906/Untitled.png)
+
+## WHERE 절의 조건에서의 NULL
     
     <aside>
     🤔 JOIN 조건에 의하여 매칭된 튜플들 뿐만 아니라, 매칭되지 못한 RIGHT TABLE의 모든 튜플들도 가지고 온다.
