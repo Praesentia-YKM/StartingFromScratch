@@ -284,3 +284,17 @@ FROM절에서 ON뒤에 join condition이 명시된다.
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/986b1bbd-2156-4920-bd28-95baad3f1b91/Untitled.png)
     
     - [ ]  Spring Framework의 MVC에서 Model = Service, DAO, DTO(=VO)로 나눌 수 있다.
+
+
+- MVC구조
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/908fe0fd-02da-4852-ad21-5775888f70fc/Untitled.png)
+    
+    - Controller
+        - 클라이언트에게 요청을 받고, 요청을 수행할 비지니스 로직을 제어
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a0116700-494b-4a18-aba2-15593f0cbdc5/Untitled.png)
+        
+    - Service
+        - 비지니스 로직이 들어가는 부분
+        - Controller가 Request받으면 적절한 Service에 전달하고 전달받은 Service는 비지니스 로직을 처리한다.
