@@ -156,3 +156,116 @@ FROM절에서 ON뒤에 join condition이 명시된다.
 ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1bc9515b-520e-47be-9038-05cb15776fa8/Untitled.png)
 
 ⇒ 에초에 SELECT한 E.dept_id를 not null로 제약을 걸어버리거나, 조건에 AND를 통해 IS NOT NULL처리를 해준다.
+
+## order by , 집계함수 , group by
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6a050c2f-f401-4b35-92f8-9e1f6e939d2f/Untitled.png)
+
+## order by
+
+---
+
+<aside>
+🤔 조회 결과를 특정 애트리뷰트 기준으로 정렬하여 가져오고 싶을 때 사용, default는 오름차순
+
+</aside>
+
+- ASC ( 오름차순 )
+- DESC ( 내림차순 )
+- [ ]  임직원들의 정보를 연봉 순서대로 정렬해서 알고싶다.
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0ea56bd1-51ab-4447-ae23-5da6277f7dc5/Untitled.png)
+    
+    ⇒ 이때 부서명 별로 정렬을 한 뒤에 급여별로 내림차순 정렬을 하고 싶다면??
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9dad20bb-eacc-4c45-ae81-892077fe53d8/Untitled.png)
+    
+
+## 집계함수(aggregate function)
+
+---
+
+<aside>
+🤔 여러 tuple들의 정보를 요약해서 하나의 값으로 추출하는 함수
+* NULL값들은 제외하고 값을 추출한다.
+
+</aside>
+
+- COUNT
+- SUM
+- MAX
+- MIN
+- AVG
+- [ ]  임직원 수를 알고싶다. (COUNT(*) 은 모든 튜플의 갯수를 의미)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cd7a4b22-0870-47ef-9b45-8bd663f2c5d3/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ad90b994-981d-46b1-8108-a9ba211ecde6/Untitled.png)
+    
+    #NULL은 제외를 하고 센다는 것을 주의해야 한다! COUNT(dept_id)를 했는데 null이 있으면 안될 수도 있으니까 에스터리스크를 통해서 COUNT(*)로 튜플 수 자체를 센다.
+    
+- [ ]  프로젝트 2002에 참여한 임직우너 수와 최대 연봉과 최소연봉과 평균연봉을 알고싶다.
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c54320ff-663c-42f9-9f76-a247fda38733/Untitled.png)
+    
+
+## group by
+
+---
+
+<aside>
+🤔 관심있는 애트리뷰트를 기준으로 그룹을 나눠서 그룹별로 집계함수를 적용하고 싶을때 사용.
+
+*그룹핑한 애트리뷰트가 null값이 있을때는 null값을 가지는 tuple끼리 묶인다.
+
+</aside>
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9e1b8cca-1f16-4f12-b3ca-eff60987e5e7/Untitled.png)
+
+#selct절에 group by를 통해 지정한 그룹명이 조회의 결과에도 동일하게 나와야 하므로 selct절의 일부와과 group by절은 동일해야 한다.
+
+## Having
+
+---
+
+<aside>
+🤔 그룹핑하여 나온 결과를 기준으로 어떠한 조건을 걸고싶을떄
+
+*group by와 함께 사용한다
+*집계함수의 결과값을 바탕으로 그룹을 필터링하고 싶을 떄 사용
+
+</aside>
+
+- [ ]  프로젝트 참여 인원이 7명 이상인 프로젝트 들에 대해서 각 프로젝트에 참여한 임직원 수와 최대 연봉과 최소 연봉과 평균연봉을 알고싶다.
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/26290a58-dbaf-4cf8-a226-4d641719833d/Untitled.png)
+    
+
+## Example
+
+---
+
+- 각 부서별 인원수를 인원 수가 많은 순서대로 내림차순 정렬해서 알고싶다.
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bc968969-2e42-45b0-8903-e431bde214af/Untitled.png)
+    
+    ⇒ null값이 있는 튜플도 그룹끼리 묶여서 집계함수가 실행됐다.
+    
+- 회사 전체 평균 연봉보다 평균연봉이 적은 부서들의 평균연봉을 알고싶다.
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fed38246-b8f9-4373-bd7a-9ec7f9debe58/Untitled.png)
+    
+- 각 프로젝트 별로 프로젝트에 참여한 90년대생들의 수와 이들의 평균 연봉을 알고싶다.
+    1. 각 프로젝트 별로 ⇒ 그룹해야겠다
+    2. 관련있는 테이블 뭐가 있을지 생각
+    3. join을 해야겠구나 무슨join일지 생각
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7324a40f-c382-4716-abfa-9ec765a71389/Untitled.png)
+    
+- 프로젝트 참여 인원이 7명 이상인 프로젝트에 한정해서 각 프로젝트 별로 프로젝트에 참여한 90년대생들의 수와 이들의 평균연봉을 알고싶다.
+    
+    ⇒ 그룹핑을 한 뒤에 그 그룹에 대해서 HAVING절을 통해 COUNT를 한 값을 원하는게 아니고 프로젝트 참여 인원이 7명이상인 것을 한정해서 조건걸고 싶었기 때문에 WHERE에 걸어야한다.
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c2e1a6d6-ffd2-40de-9193-5fc2263c76e2/Untitled.png)
+    
+    ⇒ 하단그림이 정답
