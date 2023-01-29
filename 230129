@@ -130,3 +130,29 @@ FROM절에서 ON뒤에 join condition이 명시된다.
     
 
 ## USING
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c075ada2-be30-4e2a-ad73-72d0fb83355d/Untitled.png)
+
+## NOT IN 사용시 값 중 하나가 NULL이라면?
+
+---
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bedb8aea-96e2-46c3-b6a7-4d6f22b1d26e/Untitled.png)
+
+⇒ 하단 예제 참고
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9c1d98a5-10c0-49a8-8dd9-e44d569531ef/Untitled.png)
+
+⇒ 3≠1 AND 3≠2 AND 3≠ NULL
+
+(TRUE)    (TRUE)   (UNKWNON)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2677eee9-3cbf-4624-aad0-286b60a89c5d/Untitled.png)
+
+⇒ 여기서 2000년생들을 조회하는데 값들 중에서 NULL값이 있다면, NOT IN이 UNKNOWN이 된다. 그러나 WHERE절은 TRUE만 출력하기 때문에 아무런 결과가 뜨지 않게 된다!!!
+
+***해결방법***
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1bc9515b-520e-47be-9038-05cb15776fa8/Untitled.png)
+
+⇒ 에초에 SELECT한 E.dept_id를 not null로 제약을 걸어버리거나, 조건에 AND를 통해 IS NOT NULL처리를 해준다.
