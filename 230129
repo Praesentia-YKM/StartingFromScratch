@@ -313,3 +313,38 @@ FROM절에서 ON뒤에 join condition이 명시된다.
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/424d302e-c823-4d8a-85fe-b19389a5f7f2/Untitled.png)
     
     #TestListDAO.java
+- DAO 작성법 3가지
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8c92e38c-1dfa-4b18-b2f6-17d6e4741b88/Untitled.png)
+    
+    - 기존 DAO형태로 사용하는 경우
+        - @Repository 지정된 class가 EgovAbstractMapper를 extends 하여 insert, update, delete, selectByPk, list 메소드를 활용한다.
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/75c5b8ff-698d-4046-9968-e4129d71b9c0/Untitled.png)
+            
+    - Mapper interface 사용 방식
+        - Mapper 인터페이스 작성 시 다음과 같이 @Mapper annotation 사용한다. (패키지를 포함하는 클래스명 부분이 mapper xml 상의 namespace가 선택되고 인터페이스 메소드가 query id로 호출되는 방식)
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b0d0a21a-d4c0-4c36-b5d9-c40eef8a2535/Untitled.png)
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/83ffd9c5-c443-4d2b-9858-5f523afc79a9/Untitled.png)
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a2b40d81-8302-42d0-a819-83bae0d4ccbc/Untitled.png)
+            
+    - Annotation 사용방식
+        - mapper xml 작성 없이 Mapper 인터페이스 상에 @Select, @Insert, @Update, @Delete 등의 annotation을 통해 query가 지정되어 사용된다.
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ae5cbb51-156f-4aa0-926b-20d8c5f7448e/Untitled.png)
+            
+- DTO , VO  ⇒jsp 자바빈즈
+    
+    > DTO: Data Transfer Object
+    VO : Value Object
+    > 
+    - 각 계층간 데이터 교환을 위한 자바객체를 의미
+    - 객체의 속성과 getter , setter만 가지고 있다. (로직 X)
+    - 계층간 데이터 교환을 위한 자바빈즈다
+    - 데이터 베이스 레코드(행)이 데이터를 매핑하기 위한 데이터 객체
+    - Database에서 data를 얻어 service나 controller 등으로 보낼 때 사용하는 객체
+    
+    ##자바빈즈(Java Beans) - JSP 기반 웹 어플리케이션에서 정보를 표현하기 위한 객체
