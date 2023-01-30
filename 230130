@@ -85,3 +85,260 @@ Spring Framework의 MVC에서 Model = Service, DAO, DTO(=VO)로 나눌 수 있�
         - Database에서 data를 얻어 service나 controller 등으로 보낼 때 사용하는 객체
         
         ##자바빈즈(Java Beans) - JSP 기반 웹 어플리케이션에서 정보를 표현하기 위한 객체
+        
+        ##Autowired와 @Resource의 차이점
+						https://mangkyu.tistory.com/150
+
+##트랜잭션
+						https://mangkyu.tistory.com/154
+
+
+
+
+<bean 과 의존성 주입 부분 살펴보기>
+https://ch4njun.tistory.com/219
+
+
+
+
+
+
+
+
+
+##스프링 bean이란
+
+
+
+
+
+
+
+
+## 자바빈 vs 스프링빈 (아예 다름)
+Java Bean은 특정 형태의 클래스를 가르키는 뜻으로 사용된다.
+DTO 혹은 VO의 형태가 Java Bean이라고 생각하면 쉽다.
+
+						https://jjingho.tistory.com/10
+
+
+https://onecutwook.tistory.com/13
+
+
+
+
+##커맨드객체 vo과 jsp의 name속성 ->변수명일치
+
+
+##JSTL
+
+
+
+
+##의존성이란 !!!! 블로그 내용 엉청 좋다
+https://ecsimsw.tistory.com/entry/%EC%9D%98%EC%A1%B4%EC%84%B1-%EC%A3%BC%EC%9E%85%EA%B3%BC-%EB%B3%80%EA%B2%BD%EC%9D%98-%EC%9C%A0%EC%97%B0%ED%95%A8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##Json이란?
+	https://velog.io/@surim014/JSON%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##requestbody
+
+
+@RequestBody 어노테이션과 @ResponseBody 어노테이션이 각각 HTTP요청 바디를 자바객체로 변환하고 자바객체를 다시 HTTP 응답 바디로 변환해준다. 
+
+@RequestBody / @ResponseBody 정리. 
+클라이언트에서 서버로 필요한 데이터를 요청하기 위해 JSON 데이터를 요청 본문에 담아서 서버로 보내면, 서버에서는 @RequestBody 어노테이션을 사용하여 HTTP 요청 본문에 담긴 값들을 자바객체로 변환시켜, 객체에 저장한다.
+
+서버에서 클라이언트로 응답 데이터를 전송하기 위해 @ResponseBody 어노테이션을 사용하여 자바 객체를 HTTP 응답 본문의 객체로 변환하여 클라이언트로 전송한다. 
+
+
+
+## request , response , ajax
+
+https://song8420.tistory.com/159
+
+## 마이바티스란?
+ 퍼시스턴스 프레임워크의 일종이며 자바 메서드와 SQL문을 연결하는 매핑 프레임워크이다. JDBC 코드를 캡슐화하여 DB프로그래밍을 단순화 시키고 자바 소스와 SQL을 분리하여 관리한다. 
+
+https://techhan.github.io/study/spring-07/
+
+
+
+
+
+##sql작성시 내가 조회할 테이블을 from절에 다 포함시키는게 맞지만 from절 다음 join
+을 쓰게 되면 from ( A + join (B ))이렇게해서 조인을 통해 2개의 테이블을 조회한다고 말할 수 있음 -아래예시참고
+
+
+
+
+https://victorydntmd.tistory.com/149    [DAO,VO 흐름]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##mybatis sql커넥션해주는 객체(jdbc였으면 직접구현, mybatis는 구현되어있음)
+https://heewon26.tistory.com/2
+
+
+https://chanhuiseok.github.io/posts/spring-3/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##Mybatis <if>
+
+##mybatis #{} . ${}
+
+
+https://madplay.github.io/post/difference-between-dollar-sign-and-sharp-sign-in-mybatis
+
+
+
+##where 1=1
+https://hyjykelly.tistory.com/5
+
+
+
+
+
+
+
+
+
+
+##람다는 익명클래스에서 유래됨 -> 익명클래스 ( 인스턴스에 클래스선언(클래스이름없이 나머지코드 그대로))
+[ ( 매개변수 ) -> 실행함수 or 실행코드   ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+##DB트랜잭션
+https://devuna.tistory.com/30
+
+
+
+
+
+
+
+
+##mysql 트랜잭션 예제
+https://audgnssweet.tistory.com/45
+
+##mybatis 트랜잭션 적용 방법=> 회사에서는 트랜잭션을 AOP를 통해 다룸
+https://codevang.tistory.com/264
+
+
+https://developsd.tistory.com/129
+https://yeonyeon.tistㅛory.com/223
