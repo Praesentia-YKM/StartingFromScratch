@@ -51,3 +51,6 @@ Client가 자원의 상태(정보)에 대한 조작을 요청하면 Server는 �
 REST에서 하나의 자원은 JSON, XML, TEXT, RSS 등 여러 형태의 Representation으로 나타내어 질 수 있다.
 JSON 혹은 XML를 통해 데이터를 주고 받는 것이 일반적이다.
 
+<API란>
+
+어떠한 기능을 컴퓨터에 제공하여 상호작용을 돕는것
