@@ -11,3 +11,49 @@ ex) 1+1 명령, 함수 function() 명령, 2+2명령이 있으면 브라우저는
 ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/84d5be0c-4873-4bd1-bead-c768efe39317/Untitled.png)
 
 ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8c77d246-256c-47b3-9b5b-c5fe519fb8dc/Untitled.png)
+
+- DOM
+    - HTML의 최상단객체 ( head ,body, footer를 전부다 아우르는 최상단 객체 Document를 일컸는다)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/06c103cb-de6d-4f20-8e7c-eb845bc0dea3/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/edb198b6-dbe4-4f0d-99d2-6a4da353e9a0/Untitled.png)
+    
+- 호이스팅이란
+    - 목적프로그램 : 원시프로그램을 컴파일러를 이용해서 기계어로 번역한 파일 (obj)
+    → 목적파일은 cpu가 직접실행하는코드인 기계어로 이루어져있다.
+    - **원시 프로그램**
+    (source program)이란 [원시 언어](http://wiki.hash.kr/index.php/%EC%9B%90%EC%8B%9C_%EC%96%B8%EC%96%B4) 로 작성된 [프로](http://wiki.hash.kr/index.php/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8)그램으로서, 컴퓨터 하드웨어에서는 직접 처리할 수 없는 언어(즉, [기계어](http://wiki.hash.kr/index.php/%EA%B8%B0%EA%B3%84%EC%96%B4) 이외의 언어)로 쓰여진 프로그램을 말한다. ( 인간이 쓰는 언어)
+    
+    > 컴파일러와 인터프리터는 고급언어로 작성된 원시 프로그램(Source Program)을 목적 프로그램(Object Program)으로 번역하는 번역 프로그램이며, 프로그램 번역 방식에 따라 구분됩니다.
+    > 
+    - 컴파일러 : 원시프로그램전체를 목적프로그램(obj)으로 번역한 후 , 링킹작업을 통해 exe를 생성
+    - 인터프리터 : 고급 언어로 작성된 프로그램을 한 줄 단위로 받아들여 번역, 번역과 동시에 프로그램을 한줄 단위로 즉시 실행. 프로그램이 직접 실행하므로 obj(목적프로그램)은 생성되지 않음.
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1ca8c573-14b7-4c08-86dc-309ff2eac67f/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/679fbaf8-81da-46d3-998a-071285c9ab57/Untitled.png)
+    
+    <aside>
+    😄 JavaScript에서 **호이스팅**
+    (hoisting)이란, 인터프리터가 변수와 함수의 메모리 공간을 선언 전에 미리 할당하는 것을 의미합니다. `var`
+    로 선언한 변수의 경우 호이스팅 시 `undefined`로 변수를 초기화합니다. 반면 `let`과 `const`로 선언한 변수의 경우 호이스팅 시 변수를 초기화하지 않습니다.
+    
+    </aside>
+    
+    [자바스크립트(JavaScript) - 변수, 변수 선언, 호이스팅](https://bearcomputer.tistory.com/25)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e37b2718-97c1-4c4e-8e7d-98260377114c/Untitled.png)
+    
+    > JavaScript는 함수의 코드를 실행하기 전에 함수 선언에 대한 메모리부터 할당합니다. 덕분에 함수를 호출하는 코드를 함수 선언보다 앞서 배치할 수 있습니다. 예를 들어,
+    > 
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7feaed43-d748-469e-852b-1217383bbb18/Untitled.png)
+    
+    > 
+    > 
+    > 
+    > ### [let과 const 호이스팅](https://developer.mozilla.org/ko/docs/Glossary/Hoisting#let%EA%B3%BC_const_%ED%98%B8%EC%9D%B4%EC%8A%A4%ED%8C%85)
+    > 
+    > `let`과 `const`로 선언한 변수도 호이스팅 대상이지만, `var`와 달리 호이스팅 시 `undefined`로 변수를 초기화하지는 않습니다. 따라서 변수의 초기화를 수행하기 전에 읽는 코드가 먼저 나타나면 예외가 발생합니다.
+    >
