@@ -1,0 +1,13 @@
+> 웹브라우저는 실행 우선순위에 차이가 있다. 무조건 먼저 들어온다고 먼저 실행하는게 아니고 queue에는 순서대로 담아두지만 실행되서 스택에 올라가는 순서는 다르다
+ex) 1+1 명령, 함수 function() 명령, 2+2명령이 있으면 브라우저는 1+1 , 2+2 , function을 실행한다.
+> 
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/45d2e21a-8796-4531-8850-174bf272794b/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/01037d12-540a-4c3a-a2fe-6295b0b9d669/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/08d25db9-7261-475e-8f78-3bfce0f49661/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/84d5be0c-4873-4bd1-bead-c768efe39317/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8c77d246-256c-47b3-9b5b-c5fe519fb8dc/Untitled.png)
