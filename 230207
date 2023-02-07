@@ -54,3 +54,53 @@ FROM stores s;
 
 또한 스칼라 서브쿼리 사용시 서브쿼리의 결과값이 같은 경우가 많거나, 매번 동일한 결과값을 반환한다면, 스칼라 서브쿼리의 캐싱 효과를 통해 성능을 높일 수 있으나, 
 '서브쿼리에서 사용되는 조건의 종류가 많아지거나 혹은 조건 데이터가 지속적으로 바뀔경우 캐싱의 효율성이 떨어지기 때문에 이전보다 성능이 떨어질 수 있습니다.
+
+조인 (INNER JOIN) : 기준 테이블과 조인 테이블 모두 데이터가 존재해야 조회됨
+아우터 조인 (OUTER JOIN) : 기준 테이블에만 데이터가 존재하면 조회됨
+
+<inner join>
+ELECT a.empno
+     , a.ename
+     , a.job
+     , a.mgr
+     , a.deptno
+     , b.dname
+  FROM emp AS a
+ INNER JOIN dept AS b
+    ON a.deptno = b.deptno
+조인은 기준 테이블(emp), 조인 테이블(dept)에  조인 컬럼(deptno)에 해당하는 값이 모두 존재하는 경우에만 데이터가 조회된다
+emp 테이블 "KING"의 deptno "90"은 dept 테이블에 존재하지 않기 때문에 조회되지 않는다.
+
+<LEFT OUTER JOIN>
+SELECT a.empno
+     , a.ename
+     , a.job
+     , a.mgr
+     , a.deptno
+     , b.dname
+  FROM emp AS a
+  LEFT OUTER JOIN dept AS b
+    ON a.deptno = b.deptno
+아우터 조인에서 LEFT, RIGHT는 기준 테이블을 지정하는 것이며, 위의 쿼리에서 LEFT OUTER JOIN의 기준 테이블은 emp 테이블이다. 
+아우터 조인의 경우 조인 테이블(dept)에 데이터가 없어도 기준 테이블(emp)의 모든 데이터가 조회되고 조인 
+테이블(dept)에 데이터가 존재할 경우 해당 데이터를 참조할 수 있다.
+emp 테이블 "KING"의 deptno "90"은 dept 테이블에 존재하지 않아도 조회가 되지만, dname은 참조할 수 없기 때문에 NULL로 표시된다.
+
+<아우터 조인  (RIGHT OUTER JOIN)>
+SELECT a.empno
+     , a.ename
+     , a.job
+     , a.mgr
+     , a.deptno
+     , b.dname
+  FROM emp AS a
+ RIGHT OUTER JOIN dept AS b
+    ON a.deptno = b.deptno
+
+LEFT OUTER JOIN과 개념을 동일하지만 RIGHT에 해당하는 dept 테이블이 기준 테이블이 된다. 
+LEFT OUTER JOIN의 결과와 다르게 dept 테이블의 모든 데이터가 조회되고 조인 테이블(emp)의 테이블에 데이터가 있을경우 해당 값을 표시한다.
+대부분 LEFT OUTER JOIN을 많이 사용하지만 상황에 따라서 RIGHT OUTER JOIN을 사용할 수 있으니 개념을 꼭 이해하고 있어야 한다.
+
+ 
+
+아우터 조인을 사용하는 이유는 기준 테이블의 데이터를 누락 없이 모두 조회하고 참조 테이블의 값이 있을 경우 해당 값을 사용하기 위해서이다.
