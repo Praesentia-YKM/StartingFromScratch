@@ -1,0 +1,29 @@
+> 변수명 = function() { }
+> 
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0afce3a8-d193-4957-9a13-59e1b193cc6e/Untitled.png)
+
+> 익명함수란? 1회성호출을 하는 함수  함수정의 + 함수선언 [  () 해주면됨 ] 의 합쳐짐
+> 
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f7826c6f-81de-4eae-b0ed-ef40c130a6e7/Untitled.png)
+
+> 숫자 + 숫자 , 문자 + 숫자
+> 
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/91a00852-bcfb-40b5-b736-c4f2d59dea74/Untitled.png)
+
+i+j는 숫자+숫자라 숫자형식으로 0+1 = 1이 나올 것이다. 하지만 앞쪽에 ‘coding everybody’라는 문자열 + i  가 먼저기 때문에 자바스크립트는 문자열 + 숫자는 뒤에 숫자부분을 자동으로 문자열로 인식해서 바꿔준다. 따라서 i+j는 앞쪽의 문자열에 의해 문자열취급을 받게 된다. 01로 출력
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d8451ad4-b4a5-467d-a4ea-7925e9cad00f/Untitled.png)
+
+개발자 도구에서 watch expressions으로 내가 보고싶은 값을 추가해서 변화를 볼 수 있다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/95d71586-ffac-4bc3-bec9-2255e6903198/Untitled.png)
+
+다음행으로 이동.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a3a46712-dd38-4682-a849-1ec8fd91c5ce/Untitled.png)
+## SQL에서 SUBSTRING과 자바에서 SUBSTRING이 형식이 다르다!!!!!!!!
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/91bb7bc0-9398-4523-a708-21c52261b5f8/Untitled.png)
