@@ -43,3 +43,91 @@
     2. 어떤 이벤트에 의해 호출되어지는 함수.
     
     </aside>
+    
+< Spring Proxy >
+Proxy의 사전적 의미
+영영사전에 Proxy를 검색해보면 다음과 같다.
+
+authority given to a person to act for someone else, such as by voting for them in an election, or the person who this authority is given to
+
+대략 누군가를 대신하여 뭔가를 수행하는 권한 자체 또는 그 권한을 받은 주체를 뜻한다.
+Geeksforgeeks는 어떨까?
+
+Proxy is type of a tool or application or program or system, which helps to protect the information of its users and computers.
+
+의미만 들어도 대충 Proxy server는 무슨 일을 할 지 추측이 된다.
+클라이언트가 요청을 하면 중간에서 서버 대신 뭔가를 수행해주는 서버일 것 같다.
+그럼 맞는지 알아보자.
+
+Proxy server
+프록시 서버는 client과 server 간에 주고받는 네트워크 요청과 응답 사이에 위치하는 서버이다. 여러가지 이유로 사용되는데, 캐싱 또는 사용자 보호의 이유로 쓰인다.
+
+캐싱의 경우에는 고속 인터넷 연결이 가능한 건물 상에 프록시 서버를 설치하고, 사용자 요청이 들어오면 캐싱돼있는 페이지 중에 있는지 확인하고 없으면 요청해서 받아오거나 이전 버전이라면 업데이트해서 보여주는 역할을 한다. 초기에는 이 역할로 활용되었지만 요즘은 캐시서버를 많이 사용하지 않는 추세라서 잘 쓰이지 않다가 두 번째 이유로 쓰이고 있다.
+
+두 번째 이유는 사용자 개인정보 보호를 위해 쓰이는데, 사용자는 직접 서버에 요청하는 것이 아니라 프록시 서버에 요청을 보낸다. 그럼 프록시 서버는 사용자의 IP address가 아닌 새 공인 아이피를 생성해서 서버에 요청을 보낸다. 그럼 서버는 사용자의 IP를 알지 못한 채 프록시 서버의 요청에 응답해줄 뿐이다. 프록시 서버는 이 응답을 받아 원래 요청을 했던 client 의 IP로 응답을 전달해준다. 즉, 사용자와 서버 사이에서 중계를 해주는 것이다.
+
+proxy server의 장점
+IP 주소를 가릴 수 있다.
+로딩에 걸리는 시간을 줄일 수 있을 지도 모른다.
+제한된 웹사이트를 우회하여 접속할 수 있다.
+캐싱을 이용하여 시스템의 성능을 올린다.
+proxy server의 단점
+캐싱하는 과정에서 proxy 서버 관리자에게 쉽게 개인정보가 노출될 위험이 있다.
+TLS/SSL을 사용하면 데이터와 정보가 유출될 수 있다.
+그럼 Spring의 Proxy는?
+위의 Proxy의 정의와 사용 예를 보고 유추해보건대, Spring의 Proxy도 뭔가의 사이에서 뭔가를 수행해주는 역할이라고 생각할 수 있다. 어떤 것들 사이에 동작하는 지를 알기 위해서는 AOP를 먼저 공부해야할 것 같다.
+
+프록시 패턴
+프록시 객체는 원래 객체를 감싸고 있는 같은 타입의 객체이다. 프록시 객체가 원래 객체를 감싸서 client의 요청을 처리하기 하는 패턴이다. 쓰는 이유는 접근을 제어하고 싶거나, 부가 기능을 추가하고 싶을 때 주로 사용한다.
+
+아래와 같은 코드를 보자.
+
+public interface Image {
+	void displayImage();
+}
+public class RealImage implements Image {
+
+    private String fileName;
+
+    public RealImage(String fileName) {
+        this.fileName = fileName;
+        loadFromDisk(fileName);
+    }
+
+    private void loadFromDisk(String fileName) {
+        System.out.println("Loading " + fileName);
+    }
+
+    @Override
+    public void displayImage() {
+        System.out.println("Displaying " + fileName);
+    
+    }
+}
+public class ProxyImage implements Image {
+    private RealImage realImage;
+    private String fileName;
+
+    public ProxyImage(String fileName) {
+        this.fileName = fileName;
+    }
+
+    @Override
+    public void displayImage() {
+        if (realImage == null) {
+            realImage = new Real_Image(fileName);
+        }
+        realImage.displayImage();
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Image image1 = new Proxy_Image("test1.png");
+        Image image2 = new Proxy_Image("test2.png");
+
+        image1.displayImage();
+        System.out.println();
+        image2.displayImage();
+    }
+}
+상대적으로 오래 걸리는 이미지 로딩 전에 로딩 텍스트를 먼저 출력할 수 있도록 프록시 객체가 흐름을 제어하고 있는 모습이다.
