@@ -145,3 +145,204 @@ public class Main {
 - [ ]  파라미터가 있으면 값이 어떻게 넘어가고, 값이 넘어가는 분기점마다 브레이크 포인트를 걸고 f8로 디버깅을 돌린다. 콘솔에 어떻게 찍히는지 , 값이 어디서 튕기는지 확인
     
     ex) jsp → controller → service → dao → 쿼
+
+
+< 비동기 처리 ajax -> callback의 이유>
+지난 포스팅에서는 동기와 비동기의 개념과 쓰임, 비동기가 갖는 문제점에 대해 알아보았다.
+이번 포스팅에서는 비동기가 갖는 문제점을 해결하기 위해, 동기적인 흐름으로 제어할 수 있는 방법 3가지(Callback, Promise, async/await)를 알아본다.
+비동기 문제의 해결책 = 흐름 제어
+여기서 흐름 제어 란, 비동기적인 흐름이 갖는 문제점을 해결하기 위해 동기적으로 흐름을 제어하는 것.
+흐름제어 방법 3가지 : 콜백함수 사용, Promise 사용, async/await 사용
+1. Callback(콜백)함수 사용
+지난 포스팅에서 비동기의 문제점의 예시로 둔 코드이다.
+
+function getData() {
+	var tableData;
+	$.get('url', function(response) {
+		tableData = response;
+	});
+	return tableData;
+}
+console.log(getData()); // undefined
+위의 코드를 콜백함수를 이용해 동기적으로 흐름제어를 해보자.
+
+function getData(callback) {
+ $.get('url', function (response) {
+  callback(response) 
+ })
+}
+getData(function (tableData) {
+ console.log(tableData)
+}) // callback
+getData 메소드의 파라미터에 나중에 실행시키고자 하는 callback함수를 담아 호출한다.
+ajax를 통해 특정 url에 데이터를 요청하고 응답을 받아오면, 그 응답(response)은 callback 함수의 인자가 된다.
+즉, response가 callback함수의 파라미터인 tableData에 대입되어 출력된다.
+
+콜백함수 사용의 단점
+아래의 코드를 예시로 둔다.
+
+$.get('url', function (response) {
+ parseValue(response, fuction(id) {
+  auth(id, function (result) {
+   display(result, function (text) {
+    console.log(text)
+   })
+  })
+ })
+})
+콜백지옥(Callback Hell)에 빠지기 쉽다.
+- 콜백 지옥 : 콜백 함수를 익명 함수로 전달하는 과정이 반복되어 코드의 들여쓰기 수준이 감당하기 힘들정도로 깊어지는 현상
+가독성이 떨어진다.
+2. Promise 사용
+콜백함수를 사용하는 것보다 효율적으로 흐름 제어를 하기 위하여 고안된 방법이다.
+
+적용 예시
+Callback 함수를 사용했을 때
+function getData(callback) {
+ $.get('url', function (response) {
+  callback(response) 
+ })
+}
+getData(function (tableData) {
+ console.log(tableData)
+}) // callback
+Promise를 사용했을 때
+function getData(callback) {
+  // new Promise() 추가
+  return new Promise(function(resolve, reject) {
+    $.get('url', function(response) {
+      // 데이터를 받으면 resolve() 호출
+      resolve(response);
+    });
+  });
+}
+// getData()의 실행이 끝나면 호출되는 then()
+getData().then(function(tableData) {
+  // resolve()의 결과 값이 여기로 전달됨
+  console.log(tableData); // $.get()의 reponse 값이 tableData에 전달됨
+});
+위의 코드를 이해하기 위해, Promise의 3가지 상태를 알아보자.
+
+Promise의 3가지 상태(states)
+여기서의 상태 = 프로미스의 처리 과정
+new Promise()로 프로미스를 생성한다.
+프로미스가 생성되고 종료될 때까지, 3가지의 상태(처리과정)를 갖는다.
+① Pending(대기) : 비동기 처리 로직이 아직 완료되지 않은 상태
+② Fulfilled(이행) : 비동기 처리가 완료되어 프로미스가 결과 값을 반환해준 상태
+③ Rejected(실패) : 비동기 처리가 실패하거나 오류가 발생한 상태
+Pending(대기)
+먼저, Promise 객체를 생성해줌으로써 대기(pending)상태가 된다. 비동기 처리 로직이 아직 완료되지 않은 상태이다.
+new Promise(); 
+Promise 객체를 생성할 때 내부에 익명함수 형태의 콜백함수를 선언할 수 있으며, 콜백함수의 인자로 resolve와 reject 키워드를 이용한다.
+new Promise(function(resolve, reject) {
+//...
+});
+Fulfilled(이행)
+콜백함수의 인자인 resolve를 실행하면 이행(fullfilled)상태가 된다. 즉, 비동기 처리가 성공적으로 완료되면 resolve를 호출한다.
+이행을 완료 라고 생각해주자.
+new Promise(function(resolve, reject) {
+  resolve();
+});
+이행상태에서 then()을 이용해 처리 결과 값을 받을 수 있다.
+function getData() {
+  return new Promise(function(resolve, reject) {
+    var data = 100;
+    resolve(data);
+  });
+}
+// resolve()의 결과 값 data를 resolvedData로 받음
+getData().then(function(resolvedData) {
+  console.log(resolvedData); // 100
+});
+Rejected(실패)
+reject 은 비동기 처리가 실패했다는 상황에서 호출된다.
+new Promise(function(resolve, reject) {
+  reject();
+});
+실패 상태가 되면, 실패한 이유(실패 처리의 결과 값)을 catch()로 받을 수 있다.
+function getData() {
+  return new Promise(function(resolve, reject) {
+    reject(new Error("Request is failed"));
+  });
+}
+// reject()의 결과 값 Error를 err에 받음
+getData().then().catch(function(err) {
+  console.log(err); // Error: Request is failed
+});
+Promise Chaining : 프로미스 연결하기
+여러 개의 Promise를 연결하여 사용할 수 있다.
+프로미스 체인을 사용하는 이유
+코드를 더 효율적으로 짜기 위해서. 비동기 코드를 아주 간단하게 정리할 수 있다.
+같은 맥락의 함수를 연속으로 호출하고 싶을 때 프로미스 값을 return 한 후, 줄줄이 .then() 메서드를 붙여나간다. 이전 프로미스가 resolve되면 그 다음 프로미스가 실행된다.
+여러 개의 프로미스 체인 중 하나라도 reject되면 바로 마지막에 달린 catch()로 내려가서 에러를 처리한다. 불필요하게 나머지 프로미스까지 차례차례 확인하지 않는다.
+사용 예시 - (1)
+new Promise(function(resolve, reject){
+  setTimeout(function() {
+    resolve(1);
+  }, 2000);
+})
+.then(function(result) {
+  console.log(result); // 1
+  return result + 10;
+})
+.then(function(result) {
+  console.log(result); // 11
+  return result + 20;
+})
+.then(function(result) {
+  console.log(result); // 31
+});
+위 코드에서는 프로미스 객체를 하나 생성하고, 2초 후에 resolve를 호출한다.
+resolve()의 호출로, 프로미스가 대기에서 이행 상태로 넘어간다. 따라서 첫번째 .then()의 로직으로 넘어가게 되고, 이행 된 결과 값 1은 매개변수 result에 담겨진다. result + 10 된 값 11이 리턴되어 .then()의 로직으로 넘겨진다.
+
+사용 예시 - (2)
+실제 웹 서비스에서 있을 법한 '사용자 로그인 인증 로직'에 적용해볼 수 있다.
+
+var userInfo = {
+  id: 'test@abc.com',
+  pw: '****'
+};
+function getData(data) {
+  return new Promise(function(resolve, reject) {
+    resolve(data);
+  });
+}
+function parseValue() {
+  return new Promise({
+    // ...
+  });
+}
+function auth() {
+  return new Promise({
+    // ...
+  });
+}
+function display() {
+  return new Promise({
+    // ...
+  });
+}
+getData(userInfo)
+  .then(parseValue)
+  .then(auth)
+  .then(diaplay);
+위 코드는 페이지에 입력된 사용자의 정보를 받아와, 파싱하고 인증하는 작업을 보여준다. 여기서 userInfo는 사용자 정보가 담긴 객체를 의미하고 parseValue, auth, display는 각각 프로미스 객체를 반환하는 함수라고 가정했다.
+
+프로미스의 예외 처리
+에러 처리 방법에는 then()의 두번 째 인자로 에러를 처리하는 방법과 catch()를 이용한 방법, 2가지가 존재한다. (후자를 권장한다.)
+2가지 방법 모두, 비동기 처리의 실패로 프로미스의 reject()가 호출되어 실패 상태가 된 경우에 이용된다.
+function getData() {
+  return new Promise(function(resolve, reject) {
+    reject('failed');
+  });
+}
+// 1. then()의 두 번째 인자로 에러를 처리하는 코드
+getData().then(function() {
+  // ...
+}, function(err) {
+  console.log(err); //failed
+});
+// 2. catch()로 에러를 처리하는 코드
+getData().then().catch(function(err) {
+  console.log(err); //failed
+});
