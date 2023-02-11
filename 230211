@@ -1,0 +1,45 @@
+- DB별 ALTER문 차이
+    
+    MARIA ( ALTER TABLE [ 테이블이름 ] ADD COLUMN , ADD COLUMN ..)  ⇒ ADD ADD로 계속 나열
+    
+    ```sql
+    ALTER TABLE SYS_SYS_ENV
+         ADD COLUMN MNG_ATC6 varchar(100)  null
+        ,ADD COLUMN MNG_ATC7 varchar(100)  null
+        ,ADD COLUMN MNG_ATC8 varchar(100)  null
+        ,ADD COLUMN MNG_ATC9 varchar(100)  null
+        ,ADD COLUMN MNG_ATC10 varchar(100)  null ;
+    ```
+    
+    ORACLE ( ALTER TABLE [ 테이블이름 ] ADD ( COLUMN ,  COLUMN .. ) ) ⇒ ADD (    , ,  ) 
+    
+    ```sql
+    ALTER TABLE SYS_SYS_ENV
+        ADD (MNG_ATC6 varchar(100)  null
+        , MNG_ATC7 varchar(100)  null
+        , MNG_ATC8 varchar(100)  null
+        , MNG_ATC9 varchar(100)  null
+        , MNG_ATC10 varchar(100)  null) ;
+    ```
+    
+    MSSQL ( ALTER TABLE [ 테이블이름 ] ADD COLUMN , ADD COLUMN .. ⇒ ADD , , , ,  
+    
+     ⇒ 괄호없음
+    
+    ```sql
+    ALTER TABLE SYS_SYS_ENV
+        ADD MNG_ATC6 varchar(100)  null
+        , MNG_ATC7 varchar(100)  null
+        , MNG_ATC8 varchar(100)  null
+        , MNG_ATC9 varchar(100)  null
+        , MNG_ATC10 varchar(100)  null
+    
+    ```
+    
+- 콜백함수란
+    
+    <aside>
+    💡 1. 다른 함수의 인자로써 이용되는 함수.
+    2. 어떤 이벤트에 의해 호출되어지는 함수.
+    
+    </aside>
