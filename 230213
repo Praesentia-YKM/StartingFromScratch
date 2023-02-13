@@ -182,3 +182,16 @@ func1();
 5. func3 메소드가 호출되면서 `Call Stack`에 쌓인다.
 6. setTimeout에서 지정한 시간(interval)이 끝나면, 'tick'이벤트가 발생하면서 `Event Queue` 로 콜백함수가 이동한다.
 7. 콜백함수는 `Call Stack`이 비면 `Call Stack`으로 이동하고, 실행된다.
+
+
+SP파일 고치고 수정시 → SCRIPT 파일을 intelliJ딴에서 update후 해당 페이지 새로코침을 해야 뜬다고 생각하는데 . 이때 물려있는 최상단jsp를 새로고침해줘야 정상적으로 페이지가 수정되어 로드된다.
+
+페이지를 로드할때 필요한 모든 스크립트는 브라우저에 다 저장된다. f12로 어떻게든 파일에 접근이 가능하다. 이때 공통코드 같은 부분은 Common.do등 과 같은 페이지에 따로 로드된다. 수작업으로 찾아줘야함 디버깅찍을시!
+IP : # JSP는 브라우저 로딩시 브라우저내에 스크립트파일형식으로 저장된다. 그러나 JAVA파일은 자바파일 내에 컴파일시 .CLASS파일로 서버에 올라가야 브라우저에 꽂히기 때문에 뒷딴에서 작업해야한다.
+
+#크롬개발자모드에서 console.log찍을시 console.log없이 변수명 찍어도 됨.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b141e590-1709-4b1b-848d-5d041a2968e5/Untitled.png)
+
+> 앞딴은 intelliJ에서 디버깅하지 않기(헤더정보만 보임) → 따로 플러그인을 다운받아서 해야한다. 크롬개발자모드 사용하기!!
+>
