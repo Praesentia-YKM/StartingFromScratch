@@ -355,4 +355,26 @@ process() 메서드의 코드 양 변화
 
 
 
-1
+유연한 컨트롤러2 - v5
+FrontControllerServletV5 에 ControllerV4 기능도 추가해보자.
+private void initHandlerMappingMap() {
+handlerMappingMap.put("/front-controller/v5/v3/members/new-form", new
+MemberFormControllerV3());
+handlerMappingMap.put("/front-controller/v5/v3/members/save", new
+MemberSaveControllerV3());
+handlerMappingMap.put("/front-controller/v5/v3/members", new
+MemberListControllerV3());
+//V4 추가
+handlerMappingMap.put("/front-controller/v5/v4/members/new-form", new
+MemberFormControllerV4());
+handlerMappingMap.put("/front-controller/v5/v4/members/save", new
+MemberSaveControllerV4());
+handlerMappingMap.put("/front-controller/v5/v4/members", new
+MemberListControllerV4());
+}
+private void initHandlerAdapters() {
+handlerAdapters.add(new ControllerV3HandlerAdapter());
+handlerAdapters.add(new ControllerV4HandlerAdapter()); //V4 추가
+}
+핸들러 매핑( handlerMappingMap )에 ControllerV4 를 사용하는 컨트롤러를 추가하고, 해당 컨트롤러를
+처리할 수 있는 어댑터인 ControllerV4HandlerAdapter 도 추가하자.
