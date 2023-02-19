@@ -33,6 +33,7 @@ public class MemberFormControllerV1 implements ControllerV1 {
         String viewPath = "/WEB-INF/views/new-form.jsp";
         RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
         dispatcher.forward(request,response);
+        
     }
 }
 회원가입 viewPath를 생성후에, 해당 viewPath로 dispatch
@@ -378,3 +379,34 @@ handlerAdapters.add(new ControllerV4HandlerAdapter()); //V4 추가
 }
 핸들러 매핑( handlerMappingMap )에 ControllerV4 를 사용하는 컨트롤러를 추가하고, 해당 컨트롤러를
 처리할 수 있는 어댑터인 ControllerV4HandlerAdapter 도 추가하자.
+
+
+import hello.servlet.web.frontcontroller.v4.ControllerV4;
+import hello.servlet.web.frontcontroller.v5.MyHandlerAdapter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
+public class ControllerV4HandlerAdapter implements MyHandlerAdapter {
+@Override
+public boolean supports(Object handler) {
+return (handler instanceof ControllerV4);
+}
+@Override
+public ModelView handle(HttpServletRequest request, HttpServletResponse
+response, Object handler) {
+ControllerV4 controller = (ControllerV4) handler;
+Map<String, String> paramMap = createParamMap(request);
+Map<String, Object> model = new HashMap<>();
+String viewName = controller.process(paramMap, model);
+ModelView mv = new ModelView(viewName);
+mv.setModel(model);
+return mv;
+}
+private Map<String, String> createParamMap(HttpServletRequest request) {
+Map<String, String> paramMap = new HashMap<>();
+request.getParameterNames().asIterator()
+.forEachRemaining(paramName -> paramMap.put(paramName,
+request.getParameter(paramName)));
+return paramMap;
+}
