@@ -1,0 +1,247 @@
+# **JSON**
+
+쿼리파라미터나 form처럼 key=value의 형식으로 데이터를 전송했듯이
+
+JSON 또한 데이터 포맷으로써 JSON 형식으로 데이터를 포맷하여 서버에 전송하게 된다
+
+```xml
+content-type : application/json
+message body : {"username" : "kim" , "age" : 20}
+
+//출력 예시
+System.out.println("messageBody = " + messageBody);
+messageBody = {"username" : "kim" , "age" : 20}
+```
+
+여기서의 핵심은 결국 JSON 또한 데이터 포맷일 뿐이라 위의 예시 같은 형식으로 데이터를 보낼 뿐이지
+
+결국엔 텍스트로 서버에 전송이 된다는 것이다
+
+하지만 JSON의 라이브러리를 사용하면 이 텍스트를 객체처럼 활용할 수 있다는 것이 바로 JSON의 장점이다
+
+이러한 장점을 활용하여 주로 HTTP API에서 데이터를 주고받을 때 사용한다
+
+JSON parsing(변환)을 위해 객체를 하나 생성하였다
+
+```java
+@Getter @Setter
+public class JsonData {
+
+    private String username;
+    private int age;
+
+}
+```
+
+JSON의 라이브러리인 jackson을 활용하여 메시지 바디에 JSON 형식으로 온 데이터를 JsonData 형식으로 출력하게 되면
+
+```java
+@WebServlet(name = "requestBodyJsonServlet", urlPatterns = "/request-body-json")
+public class RequestBodyJsonServlet extends HttpServlet {
+
+// JSON 라이브러리인 jackson으로 객체 선언private ObjectMapper objectMapper = new ObjectMapper();
+
+@Override
+protected void service(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+
+//Servlet의 inputStream으로 messageBody를 받아올 수 있다
+    ServletInputStream inputStream = request.getInputStream();
+    String messageBody = StreamUtils.copyToString(inputStream,StandardCharsets.UTF_8);
+
+//readvalue를 사용하여 메시지 바디를 어떠한 형태의 객체에 담을지 작성
+    JsonData jsonData = objectMapper.readValue(messageBody, JsonData.class);
+
+    System.out.println("jsonData.username = " + jsonData.getUsername());
+    System.out.println("jsonData.age = " + jsonData.getAge());
+
+    }
+}
+
+//출력 예시
+jsonData.getUsername() = kim
+jsonData.getAge() = 20
+```
+
+객체를 통하여 Json 데이터 포맷으로 전송받은 메시지바디안의 데이터가 출력이 되는 것을 확인할 수 있었다
+
+## **핵심정리**
+
+클라이언트가 서버에 요청 데이터를 보내는 방법은 3가지로 나뉜다
+
+**1. HTTP GET을 활용한 쿼리파라미터를 URL을 통해 전송**
+
+주로 검색, 필터, 페이징 등에서 사용한다
+
+**2.HTTP POST를 활용한 HTML Form을 메시지 바디에 담아 전송**
+
+주로 회원 가입, 상품 주문 등에서 사용한다
+
+**3. 메시지 바디에 JSON 데이터 포맷으로 담아 전송**
+
+주로 HTTP API에 사용한다
+
+이렇게 세가지의 방식이면 모든 요청 데이터를 서버에서 전송받을 수 있다
+
+### JSON과 XML의 공통점
+
+JSON과 XML은 다음과 같은 공통점을 가지고 있습니다.
+
+1. 둘 다 데이터를 저장하고 전달하기 위해 고안되었습니다.
+
+2. 둘 다 기계뿐만 아니라 사람도 쉽게 읽을 수 있습니다.
+
+3. 둘 다 계층적인 데이터 구조를 가집니다.
+
+4. 둘 다 다양한 프로그래밍 언어에 의해 파싱될 수 있습니다.
+
+5. 둘 다 XMLHttpRequest 객체를 이용하여 서버로부터 데이터를 전송받을 수 있습니다.
+
+### JSON과 XML의 차이점
+
+하지만 JSON과 XML은 다음과 같은 차이점도 가지고 있습니다.
+
+1. JSON은 종료 태그를 사용하지 않습니다.
+
+2. JSON의 구문이 XML의 구문보다 더 짧습니다.
+
+3. JSON 데이터가 XML 데이터보다 더 빨리 읽고 쓸 수 있습니다.
+
+4. XML은 배열을 사용할 수 없지만, JSON은 배열을 사용할 수 있습니다.
+
+5. XML은 XML 파서로 파싱되며, JSON은 자바스크립트 표준 함수인 eval() 함수로 파싱됩니다.
+
+### XML 예제
+
+```sql
+<dog>
+    <name>식빵</name>
+    <family>웰시코기<family>
+    <age>1</age>
+    <weight>2.14</weight>
+</dog>
+```
+
+위의 예제를 JSON 형태의 데이터로 바꾸면 다음과 같습니다.
+
+### JSON 예제
+
+```sql
+{
+    "name": "식빵",
+    "family": "웰시코기",
+    "age": 1,
+    "weight": 2.14
+}
+```
+
+---
+
+### JSON의 사용 범위
+
+XML 문서는 XML DOM(Document Object Model)을 이용하여 해당 문서에 접근합니다.
+
+하지만 JSON은 문자열을 전송받은 후에 해당 문자열을 바로 파싱하므로, XML보다 더욱 빠른 처리 속도를 보여줍니다.
+
+따라서 HTML과 자바스크립트가 연동되어 빠른 응답이 필요한 웹 환경에서 많이 사용되고 있습니다.
+
+하지만 JSON은 전송받은 데이터의 무결성을 사용자가 직접 검증해야 합니다.
+
+따라서 데이터의 검증이 필요한 곳에서는 스키마를 사용하여 데이터의 무결성을 검증할 수 있는 XML이 아직도 많이 사용되고 있습니다.
+
+- CallBack(ajax에서의 활용)
+    
+    ## 비동기처리란?
+    
+    ### 비동기식 처리 방식
+    
+    - **병렬적**인 처리 방식
+    - 태스크(task)의 수행이 종료되지 않았더라도 다음 태스크를 실행한다.
+    - javascript의 대부분의 DOM 이벤트와 Timer함수(setTimeout, setInterval), Ajax 요청은 비동기식 처리 모델로 동작한다.
+    - ex) 서버에서 데이터를 가져와서 화면에 표시하는 태스크를 수행할 때, 서버에 데이터를 요청하고 서버로부터 응답을 받을때까지 **대기하지 않고(Non-Blocking)** 즉시 다음 태스크를 수행한다. 이후에 서버로부터 데이터를 응답받으면 이벤트가 발생하고 이벤트 핸들러가 데이터를 가지고 수행할 태스크를 계속해 수행한다.
+    
+    아래의 코드에서 `setTimeout` 메소드는 비동기 함수이므로 interval이 0이어도 `A → C → B` 순으로 출력된다.
+    
+    > function func1() {
+      console.log('A');
+      func2();
+    }
+    function func2() { 
+      setTimeout(function() {
+        console.log('B');
+      }, 0);
+      func3();
+    } 
+    function func3() {
+      console.log('C');
+    }
+    func1();
+    > 
+    1. func1 메소드가 `Call Stack`에 쌓인다.
+    2. func2 메소드가 호출되면서 `Call Stack`에 쌓인다.
+    3. setTimeout 메소드가 호출되면서 `Call Stack`에 쌓인다.
+    4. 브라우저에서 제공하는 API인 `Web APIs`는 `Call Stack`의 setTimeout 메소드가 비동기임을 확인하고 `Web APIs`로 이동시킨 뒤 setTimeout 메소드 내부의 Run함수를 호출한다.(타이머 시작)
+    5. func3 메소드가 호출되면서 `Call Stack`에 쌓인다.
+    6. setTimeout에서 지정한 시간(interval)이 끝나면, 'tick'이벤트가 발생하면서 `Event Queue` 로 콜백함수가 이동한다.
+    7. 콜백함수는 `Call Stack`이 비면 `Call Stack`으로 이동하고, 실행된다.
+    
+    ## 해결방책인 Callback Function
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/48f63e25-6e9a-4290-a307-7db24a03e84c/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/93cb4325-67a2-4864-bf90-f7e2044d9a3d/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/594166cd-7883-42e9-b2f2-3efb860a5a36/Untitled.png)
+    
+    [[jQuery] Ajax 사용 - Ajax 메소드 $.ajax() $.get() .load()](https://araikuma.tistory.com/640)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/32f376fb-01e7-4b52-a7e6-56dc5c0b75e8/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0292d3ae-ab00-40fd-8d5f-746a5ea1ea39/Untitled.png)
+    
+    ⇒ 이 문제를 해결하려면
+    
+    ```
+    tableData = response;
+    ```
+    
+    가 실행 될 때까지
+    
+    ```
+    return tableData;
+    ```
+    
+    가 대기하도록 만들어야 한다.
+    
+    ⇒ 즉, 해결책은**비동기를 동기적인 흐름으로**다루는 것!
+    
+- DEBUGGING시 주의사항
+    
+    <aside>
+    💡 JSP파일 고치고 수정시 → SCRIPT 파일을 intelliJ딴에서 update후 해당 페이지 새로코침을 해야 뜬다고 생각하는데 . 이때 물려있는 최상단jsp를 새로고침해줘야 정상적으로 페이지가 수정되어 로드된다.
+    
+    페이지를 로드할때 필요한 모든 스크립트는 브라우저에 다 저장된다. f12로 어떻게든 파일에 접근이 가능하다. 이때 공통코드 같은 부분은 Common.do등 과 같은 페이지에 따로 로드된다. 수작업으로 찾아줘야함 디버깅찍을시!
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fb8b559c-827f-4d70-ae98-7082f1cd5191/Untitled.png)
+    
+    </aside>
+    
+    TIP : # JSP는 브라우저 로딩시 브라우저내에 스크립트파일형식으로 저장된다. 그러나 JAVA파일은 자바파일 내에 컴파일시 .CLASS파일로 서버에 올라가야 브라우저에 꽂히기 때문에 뒷딴에서 작업해야한다.
+    
+    #크롬개발자모드에서 console.log찍을시 console.log없이 변수명 찍어도 됨.
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b141e590-1709-4b1b-848d-5d041a2968e5/Untitled.png)
+    
+    > 앞딴은 intelliJ에서 디버깅하지 않기(헤더정보만 보임) → 따로 플러그인을 다운받아서 해야한다. 크롬개발자모드 사용하기!!
+    > 
+    
+- jsp → mvc 전체조회로직 정리
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2d2f1eb9-9a19-473a-8eb0-de450ce7be25/Untitled.png)
+    
+    <aside>
+    💡 ## **MVC 패턴에서 Service Model 의 역할 ##**
+    
+    MVC 패턴의 핵심은 View는 자신이 요청할 Controller만 알고있으면 되고, Controller는 화면에서 넘어오는 매개변수들을 이용해 Service 객체를 호출하는 역할을 한다. Service 는 불필요하게 Http 통신을 위한 HttpServlet을 상속 받을 필요도 없는 순수한 자바 객체로 구성된다(그렇기에 Service 에 request나 response와 같은 객체를 매개변수로 받아선 안된다. 그걸 사용해야하는 작업은 컨트롤러에서 해야한다.). 그렇기에 자신을 어떤 컨트롤러가 호출하든 상관없이 필요한 매개변수만 준다면 자신의 비즈니스로직을 처리하게된다. 즉 모듈화를 통해 어디서든 재사용이 가능한 클래스파일이라는 뜻이다. 단순 Web 기반이 아니라 추후 native app 으로 view단이 변경되더라도 Service는 view에 종속적인 코드가 없기때문에 그대로 재사용 할 수 있어야 한다. 그리고 추가적인 요청사항이 들어오면 기존 소스를 수정하는게 아니라 기존 service 인터페이스를 구현한 다른 클래스를 구현해 그 객체를 사용하게끔 하는것이다. OCP에 입각한 변화에는 닫혀있고 확장에는 열려있는 구조로 만들어야한다는 것이다.
+    
+    </aside>
