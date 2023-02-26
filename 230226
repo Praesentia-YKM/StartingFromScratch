@@ -1,0 +1,87 @@
+이벤트의 연결(event binding)
+특정 요소에서 발생하는 이벤트를 처리하기 위해서는 이벤트 핸들러(event handler) 함수를 작성해야만 한다.
+이렇게 작성된 이벤트 핸들러를 특정 요소에 연결하는 것을 이벤트 바인딩(event binding)이라고 한다.
+
+jQuery는 이벤트 바인딩을 위한 다양한 방법을 제공한다.
+
+다음 예제는 id가 “btn"인 요소에 클릭(click) 이벤트 핸들러를 바인딩하는 다양한 방법이다.
+
+$("#btn").click(function(event) { // 실행하고자 하는 jQuery 코드 });
+$("#btn").bind("click", function(event) { // 실행하고자 하는 jQuery 코드 });
+$("#btn").on("click", function(event) { // 실행하고자 하는 jQuery 코드 });
+$("body").on({"click": function(event) { // 실행하고자 하는 jQuery 코드 }}, "#btn");
+$("body").on("click", "#btn", function(event) { // 실행하고자 하는 jQuery 코드 });
+jQuery 1.7부터는 .bind()나 .click() 메소드를 사용해도, 내부적으로 .on() 메소드를 이용하여 이벤트 핸들러와 바인딩한다.
+
+이벤트 처리의 발전
+jQuery의 발전에 따라 이벤트를 처리하는 방법 역시 변해 왔다.
+jQuery 1.0에서는 .bind() 메소드를 사용하여 이벤트 핸들러를 등록했다.
+그 다음에는 .live() 메소드와 .delegate() 메소드를 거쳐, 현재는 .on() 메소드를 이용하여 이벤트를 처리하고 있다.
+
+.on() 메소드
+jQuery는 특정 요소에 이벤트 바인딩(event binding)하기 위해 .on() 메소드를 사용한다. jQuery 1.7부터 소개된 .on() 메소드는 다음과 같은 특징을 가진다.
+
+선택한 요소에 어떤 타입의 이벤트라도 연결할 수 있다.
+하나의 이벤트 핸들러에 여러 개의 이벤트를 동시에 연결할 수 있다.
+선택한 요소에 여러 개의 이벤트 핸들러와 여러 개의 이벤트를 같이 연결할 수 있다.
+사용자 지정 이벤트(custom event)를 위해 이벤트 핸들러로 데이터를 넘길 수 있다.
+차후에 다루게 될 요소를 이벤트에 바인딩할 수 있다.
+기본형
+아래 예제는 요소를 클릭했을 때 알람창이 켜지는 예제이다.
+
+$("p").on("click", function(){
+  alert("문장이 클릭되었습니다.");
+});
+코드 실행
+
+이벤트 핸들러 하나에 이벤트를 여러개 설정
+.on() 메소드를 사용하면 하나의 이벤트 핸들러에 여러 개의 이벤트를 동시에 바인딩할 수 있다.
+
+아래 예제는 <p> 요소에 mouseenter와 mouseleave 이벤트를 설정하였다.
+
+$("p").on("mouseenter mouseleave", function() {
+  $("div").append("마우스 커서가 문장 위로 들어오거나 빠져 나갔습니다.<br>");
+});
+코드 실행
+
+또한, 하나의 요소에 여러 개의 이벤트 핸들러를 사용하여 여러 개의 이벤트를 같이 바인딩할 수도 있다.
+
+$("p").on({ 
+  click: function() {
+    $("div").append("마우스가 문장을 클릭했습니다.<br>");
+  },
+  mouseenter: function() {
+    $("div").append("마우스가 커서가 문장 위로 들어왔습니다.<br>");
+  },
+  mouseleave: function() {
+    $("div").append("마우스가 커서가 문장을 빠져 나갔습니다.<br>");
+  }
+});
+코드 실행
+
+.off() 메소드
+.off() 메소드는 더 이상 사용하지 않는 이벤트와의 바인딩(binding)을 제거한다.
+
+$("#btn").on("click", function() {
+  alert("버튼을 클릭했습니다.");
+});
+$("#btnBind").on("click", function() {
+  $("#btn").on("click").text("버튼 클릭 가능");
+});
+$("#btnUnbind").on("click", function() {
+  $("#btn").off("click").text("버튼 클릭 불가능");
+});
+코드 실행
+
+.one() 메소드
+.one() 메소드는 바인딩(binding)된 이벤트 핸들러가 한번만 실행되고 나서는, 더는 실행되지 않는다.
+
+$("button").one("click", function() {
+  $("div").append("이제 클릭이 되지 않습니다.<br>");
+});
+코드 실행
+
+.one() 메소드는 on() 메소드와 같은 인수를 전달받는다.
+따라서 여러 개의 이벤트 핸들러와 여러 개의 이벤트를 가질 수 있는 등 .on() 메소드와 같은 특징을 갖는다.
+
+참조
