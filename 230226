@@ -85,3 +85,36 @@ $("button").one("click", function() {
 따라서 여러 개의 이벤트 핸들러와 여러 개의 이벤트를 가질 수 있는 등 .on() 메소드와 같은 특징을 갖는다.
 
 참조
+
+ORA-02291: 무결성 제약조건이 위배되었습니다.부모 키가 없습니다.
+에러 발생원인 및 해결방법
+### Error updating database. Cause: java.sql.SQLIntegrityConstraintViolationException: ORA-02291: 무결성 제약조건(DWB2B.FK_COL01)이 위배되었습니다- 부모 키가 없습니다. ### The error may involve kr.service.theshop.rt.insertReturn-Inline ### The error occurred while setting parameters ### SQL: insert into temp1019(COL01) values('2') ### Cause: java.sql.SQLIntegrityConstraintViolationException: ORA-02291: 무결성 제약조건(DW.FK_COL01)이 위배되었습니다- 부모 키가 없습니다.
+
+
+ 
+
+ 
+
+ORA-02291 에러 발생원인
+쿼리에서 INSERT, UPDATE 시 무결성 제약조건에 따라 에러가 발생한 경우입니다.
+
+부모테이블의 존재하지 않은 값을 자식테이블에 넣으려고 할떄 에러가 발생합니다.
+
+ 
+
+ 
+
+ORA-02291 에러 해결방법
+자식테이블에 넣으려고 하는 데이터가 부모테이블에 있는지 확인합니다.
+
+ 
+
+case1. 자식테이블에 있는 데이터가 부모테이블에 없는 경우
+
+-> 부모테이블에 자식테이블에 들어갈 데이터를 넣어줍니다.
+
+ 
+
+case2. 자식테이블에 있는 데이터가 부모테이블에 있으면 안되는경우
+
+-> 관계조건인 부모테이블과 자식테이블의 연결되어있는 외래키(Foreign Key)를 삭제합니다.
