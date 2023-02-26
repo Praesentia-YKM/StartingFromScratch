@@ -118,3 +118,45 @@ case1. 자식테이블에 있는 데이터가 부모테이블에 없는 경우
 case2. 자식테이블에 있는 데이터가 부모테이블에 있으면 안되는경우
 
 -> 관계조건인 부모테이블과 자식테이블의 연결되어있는 외래키(Foreign Key)를 삭제합니다.
+
+# ModelAndView
+
+---
+
+- Controller 처리 결과 후 응답할 view와 view에 전달할 값을 저장
+- 생성자
+    - ModelAndView(String viewName) : 응답할 view 설정
+    - ModelAndView(String viewName, Map values) : 응답할 view와 view로 전달할 값들을 저장한 Map 객체
+    - ModelAndView(String viewName, String name, Object value) : 응답할 view 이름, view로 넘길 객체의 name-value
+- 주요 메소드
+
+# 사용법
+
+---
+
+```
+@RequestMapping("/api/member")
+public ModelAndView view(){
+
+//데이터와 뷰를 동시에 설정 가능하다
+ModelAndView mv = new ModelAndView();
+mv.setViewName("/api/member"); //뷰의 이름
+mv.addObject("data", "123");
+
+return mv;
+
+```
+
+반환값으로 ModelAndView 객체를 반환한다.
+
+ModelAndView 객체를 선언 및 생성한다.
+
+뷰의 이름을 설정해줘야 하는데,setViewName() 메소드를 이용한다.`mv.setViewName("뷰의 경로");`
+
+데이터를 보낼때는 addObject() 메소드를 이용한다.`mv.addObject("변수 이름", "데이터 값");`
+
+그리고`return mv;`
+
+ModelAndView 객체를 반환한다.
+
+jsp단에서도 똑같이 EL언어를 사용 ${} (Body 내에)`Data : ${}`
