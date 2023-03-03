@@ -96,3 +96,42 @@ public class Main {
     }
  
 }
+
+
+#공통부분 문자열.java
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.io.IOException;
+
+public class Main {
+	public static int answer;
+	public static String S1, S2;
+	public static int[][] memo;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		S1 = br.readLine();
+		S2 = br.readLine();
+		
+		memo = new int[S2.length() + 1][S1.length() + 1];
+		
+		for (int i = 0; i < S2.length(); ++i) {
+			for (int j = 0; j < S1.length(); ++j) {				
+				if (S2.charAt(i) == S1.charAt(j)) {
+					memo[i + 1][j + 1] = memo[i][j] + 1;
+					answer = (answer < memo[i + 1][j + 1]) ? memo[i + 1][j + 1] : answer;
+				}
+			}
+		}
+		
+		System.out.println(answer);
+	}
+}
+
+ABRACA~ 를 S1이라 하고 인덱스는 i, ECADA~ 를 S2라 하고 인덱스는 j라고 한다면 
+S1[i] == S2[j]라면 이전까지 연속되는 부분 문자열에 새로 공통된 문자가 들어가므로 
+S1과 S2에 공통되는 이전 문자인 memo[i -1][j - 1]에 저장된 길이에 + 1을 하여
+즉, memo[i -1][j - 1] + 1을 현재 위치에서 공통되는 연속된 부분 문자열인 memo[i][j] 갱신하면 됩니다. 
+이때, S1[i]!= S2[j] 일 경우는 연속되는 부분 문자열을 찾는 것이므로 0으로 채워주면 됩니다.
+
+그리고 최대 길이를 찾으면 되므로 최대 길이를 갱신하면 됩니다.
