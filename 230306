@@ -65,3 +65,99 @@ if(StringUtils.isEmpty(emptyString)) {
 
 Null 또는 빈 문자열
 StringUtils.isEmpty() 메서드 내부에서 null을 체크하므로 더 이상 조건문의 첫 번째 조건에서 null을 체크할 필요가 없습니다.
+
+
+========================데이터베이스=========================
+
+구글링을 해보니, 특정 유저(오너)의 모든 테이블에서 행(row) 갯수를 각각 가져오는 방법이 몇가지가 되더군요.
+그중에 아래 2개는 실시간으로 가져오는 것으로 각 테이블을 위한 select 문을 구성하는 방법입니다.
+원리는 같지만, 구현하는 방법에 약간 차이만 있네요.
+
+1. sqlplus 의 spool 을 이용한 방법
+
+Set heading off
+Set feedback off
+Set pagesize 0
+Set termout off
+Set trimout on
+Set trimspool on
+Set recsep off
+Set linesize 100
+Column d noprint new_value date_
+Column u noprint new_value user_
+Spool tmp
+Select 'Select '''||table_name||' , ''||count(*) from '||table_name||';',
+    to_char(sysdate, 'YYYYMMDDHH24MISS') d, user u
+from user_tables
+order by table_name
+/
+Spool off
+Spool count_&user_._&date_
+@tmp.LST
+Spool off
+
+위의 내용을 rowcount.sql 이라는 텍스트 파일로 저장하고 sqlplus 에 접속해서 이 파일을 @rowcount.sql 로 실행합니다.
+그러면, sqlplus 를 실행시켰던 폴더 위치에 count_<user name>_<system_date>.LST 라는 파일이 생성되어 있습니다.
+
+spool 을 이용한 트릭이여서, 나중에 다른 용도로 활용할 기회가 있을 것 같네요.
+
+
+2. stored procedure 에서 for loop 문을 이용
+
+set serveroutput on
+declare
+    v_cnt number;
+begin
+    for v_rec in (select table_name from all_tables a where owner='XXX') loop
+  execute immediate 'select count(*) from XXX.' || v_rec.table_name into v_cnt;
+  dbms_output.put_line('Table XXX.' || v_rec.table_name || ' has ' || v_cnt || ' row(s).');
+    end loop;
+end;
+
+위에서 XXX 를 원하는 owner 로 바꿔서 실행합니다.
+원하는 결과 포맷이 다르면 put_line 에서 원하는 출력 포맷으로 변경하면 되겠죠.
+
+
+3. xmltable 을 이용
+
+// 아래는 PLS-00201: identifier 'SYS.DBMS_XQUERYINT' must be declared
+// 에러를 발생하고 실행 안됩니다.
+
+SQL> select table_name, column_value cnt
+  from user_tables, xmltable (('count(ora:view("'||table_name||'"))'))
+
+
+4. xmlgen.getxml 을 이용
+
+// 아래는 실행은 되지만, /ROWSET/ROW/C 의 의미를 몰라서 찜찜...
+
+ SELECT table_name , to_number(
+  extractvalue (
+  xmltype (
+  dbms_xmlgen.getxml ('select count(* ) c from '||table_name)),'/ROWSET/ROW/C')) No_of_recs
+  FROM user_tables
+  ORDER by 1;
+
+
+5. num_rows 와 user_tables 을 이용
+
+select table_name,sum(num_rows) from user_tables group by table_name order by table_name
+
+
+6. dba_tables 을 조회하는 방법
+
+// 아래의 방법은 실행 이전에 dba_tables 을 업뎃해줘야 하는 불편이 있다.
+// 즉,
+// exec dbms_stats.gather_schema_stats(ownname => 'NAME');
+// 을 실행하고 아래의 select 를 실행해야 최신(?) 값을 얻는다. 
+
+SELECT table_name,
+   num_rows
+  FROM dba_tables
+WHERE TABLE_NAME='NAME'
+To update the latest row count value in the DBA_TABLES view execute.
+
+
+결론적으로 이렇게 단순한 정보를 구하는데에도 너무나 다양한 방법이 존재해서..좀 짜증난다.
+가끔 너무나 다양한 방법이 존재하는것도 정신없게 만든다...
+
