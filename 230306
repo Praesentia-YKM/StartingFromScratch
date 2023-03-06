@@ -1,0 +1,67 @@
+null과 빈 문자열의 차이
+빈 문자열은 값이 할당되었지만 길이는 0입니다.
+null은 값이 없습니다.
+String emptyString = "";  // 빈 문자열
+String nullString = null; // Null
+문자열 길이로 확인
+앞에서 말했듯이 빈 문자열은 길이가 0입니다. length() 메서드를 사용하여 문자열의 길이를 확인합니다.
+
+String emptyString = "";
+
+if(emptyString == null || emptyString.length() == 0) {
+  System.out.println("null 또는 빈 문자열");
+} else {
+  System.out.println("null 또는 빈 문자열이 아님");
+}
+실행 결과
+
+Null 또는 빈 문자열
+OR 연산자의 첫 번째 조건에서 먼저 null을 체크해야 합니다. 문자열이 null로 할당되었는데 조건문에서 null을 체크하지 않는다면 NullPointerException 예외가 발생합니다.
+
+isEmpty() 메서드 사용
+isEmpty() 메서드는 문자열에 텍스트가 포함되어 있으면 true, 그렇지 않으면 false를 반환합니다. 문자열이 null로 할당된 경우 NullPointerException 예외가 발생하므로 OR 연산자의 첫 번째 조건으로 null을 체크합니다.
+
+String emptyString = "";
+
+if(emptyString == null || emptyString.isEmpty()) {
+  System.out.println("null 또는 빈 문자열");
+} else {
+  System.out.println("null 또는 빈 문자열이 아님");
+}
+실행 결과
+
+Null 또는 빈 문자열
+
+equals() 메서드 사용
+equlas() 메서드를 호출한 문자열과 인수로 전달된 문자열을 비교합니다. 동일하면 true를 반환하고 그렇지 않으면 false를 반환합니다. 문자열이 null로 할당된 경우 NullPointerException 예외가 발생합니다.
+
+String emptyString = "";
+
+if(emptyString == null || emptyString.equals("")) {
+  System.out.println("null 또는 빈 문자열");
+} else {
+  System.out.println("null 또는 빈 문자열이 아님");
+}
+실행 결과
+
+Null 또는 빈 문자열
+StringUtils 클래스 사용
+Apache Commons는 Java에서 다양한 기능을 제공하는 라이브러리입니다. StringUtils는 Apache Commons가 제공하는 클래스로 문자열 작업에 유용한 메서드가 포함되어 있습니다.
+
+ 
+
+위에서 소개한 length(), isEmpty(), equals() 메서드와 달리 StringUtils에 포함된 메서드들은 null 처리가 안전하다는 것입니다.
+
+ 
+
+다음은 StringUtils.isEmpty() 메서드를 사용하여 문자열이 null인지 빈 값인지 확인하는 예제입니다.
+
+if(StringUtils.isEmpty(emptyString)) {
+  System.out.println("Null 또는 빈 문자열");
+} else {
+  System.out.println("Null 또는 빈 문자열이 아님");
+}
+실행 결과
+
+Null 또는 빈 문자열
+StringUtils.isEmpty() 메서드 내부에서 null을 체크하므로 더 이상 조건문의 첫 번째 조건에서 null을 체크할 필요가 없습니다.
