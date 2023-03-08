@@ -322,3 +322,291 @@ document.queryselector("#callback-btn")
 자 그럼 화면 호출이 어떻게 되는지 생각해보자
 
 기본적으로 화면을 부르면 기본jsp페이지가 로드 될 것이다. 하지만 그전에 우리는 HttpServeltRequest와 response를 통해 기본페이지가 로드되면 우리는 [list.do](http://list.do) url을 던진다. 우리는 그걸 컨트롤러에서 RequestMapping어노테이션으로 서블릿매핑 한다.
+sp단에서 폼태그가 있다고 치자.
+
+
+
+1
+2
+3
+4
+<form id="frm" name="frm">
+    <input type="hidden" id="pageName" name="pageName"/>
+    <input type="hidden" id="pass" name="name" value="Kim" />
+</form>
+Colored by Color Scripter
+cs
+
+
+hidden인 이유는 어차피 사용자가 볼 필요가 없기 때문이다.
+
+화면에서 어떤 식으로 값을 넘기던 form을 이용해서 넘기는 것을 생각해 보자.
+
+
+
+클릭이벤트를 주고 넘어가는 부분을 보자.
+
+
+
+1
+2
+3
+<li prop="menu" class="" id="four1">
+  <a href="#" onclick="javascript:header.pageSubmitFn('four1','frm')">MENU</a>
+</li>
+Colored by Color Scripter
+cs
+
+
+이런식으로 onclick메서드를 넣어준다.
+
+
+
+그럼 script쪽에서 들어오는 파라미터를 처리해 준다.
+
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+var header = {
+        
+        pageSubmitFn : function(pageName, form) {                    
+            $("#pageName").val(pageName); // input 태그의 value를 설정한다.                    
+            $("#"+form).attr("action",pageName+".do"); //                 
+            $("#"+form).submit();                    
+        }
+                    
+    }
+    
+Colored by Color Scripter
+cs
+
+
+
+
+위의 li태그에서 pageSubmitFn이라는 함수를 두 개의 파라미터로 불렀다. var header에서 이것을 정의하는데 pageName과 form으로 받고 있다. pageName은 전달한 페이지이름 즉 컨트롤러에서 받을 경로를 설정하는 것이고 form은 맨 위에 나온 form태그의 id값이다.
+
+
+
+
+
+submit으로 전송하면 form태그안에 값과 같이 전달된다.
+
+
+
+자 그렇다면 받는 부분을 보자.
+
+값을 받는 부분인 컨트롤러에서는 spring님이 여러가지 방법을 지원해 주신다.
+
+
+
+
+
+1. HttpServletRequest 방식
+
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+// HttpServletRequest 방식
+    @RequestMapping(value="four1.do")
+    public String initParam1(HttpServletRequest request, ModelMap model) throws Exception {
+        
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        
+        // Server의 server파일에 utf-8 설정해야 함! 한글 깨져서 안넘어감
+        String param = request.getParameter("name");
+        paramMap.put("name", param);
+                
+        List<Map> serviceList = service.selectServiceList1(paramMap);        
+        model.addAttribute("serviceList", serviceList );
+        
+        return "param/param1.tiles";
+    }
+Colored by Color Scripter
+cs
+
+
+@RequestMapping에서 do를 받아주는데 그것은 jsp에서 넘어온 값과 일치시키면 된다.
+
+그렇다면 initParam1이 자동으로 호출된다.
+
+
+
+line 3 : 매개변수들을 보자. 첫번 째 HttpServletRequest를 받는 이유는 line 8의 getParameter함수를 호출하기 위함이다. "name"은 jsp에서 폼안의 name값이다. 폼안에서 name = "name"이라고 했으므로 큰 따옴표 안의 값을 넣어주면 그것에 해당하는 value값을 가져온다. 
+
+ModelMap을 넣은 이유는 line12의 모델에 속성추가(addAttribute)를 하기 위함이다. 이것을 하면 jsp를 리턴할 때 (화면단으로 내릴 때) 사용하게 된다. 즉 param1.jsp에서 키값으로 설정한 "serviceList"로 값을 이용할 수 있다.
+
+
+
+이것이 화면에서 값을 던져서 받는 첫 번째 방법이다.
+
+
+
+
+
+
+
+2. VO 방식
+
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+// VO 방식
+    @RequestMapping(value="four1.do")
+    public String initParam2(@ModelAttribute NameVO nameVO, ModelMap model) throws Exception {
+        
+        List<Map> serviceList = serviceList.selectServiceList(nameVO);
+        model.addAttribute("serviceList ", serviceList );
+        
+        return "param/param2.tiles";
+    }
+Colored by Color Scripter
+cs
+
+
+
+
+다음은 VO를 이용한 방식이다. 즉 객체자체로 왔다갔다 하는 방식이다.
+
+
+
+그러면 일단 VO가 필요하다.
+
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+public class NameVO {
+    private String name;
+    
+    public String getName() {
+        return name;
+    }
+ 
+    public void setName(String name) {
+        this.name= name;
+    }
+}
+ 
+Colored by Color Scripter
+cs
+
+
+
+
+간단하게 만들었다. 여기서 중요한 것은 필드명인 name 이 form 태그안에 name값과 일치해야 한다는 점이다. 
+
+
+
+line3의 @ModelAttribute를 보자. 이놈은 스프링에서 setter를 자동으로 호출해주는 편리한 놈이다. 즉 필드명만 일치시키고 파라미터에 써주면 자동으로 맵핑이 된다. 매우 편리하다.
+
+
+
+서비스 임플과 맵퍼쪽에서 계속 값이 넘어간다. 그렇다면 마지막에 맵퍼에서 마이바티스로 넘기는 부분을 단일 값이 아닌 객체로 넘긴다는 것을 알려주어야 한다.
+
+
+
+
+
+마이바티스쪽 쿼리문이다. 쿼리문을 상황에 맞게 알아서 써주고 parameterType을 보자. 이것은 아까 만든 nameVO로 되어있다. nameVO 객체 형식으로 값을 받겠다는 것이다. 
+
+
+
+1
+2
+3
+4
+5
+6
+!-- VO 받기 -->
+   <select id="selectServiceList" parameterType="nameVO" resultType="egovMap">
+      SELECT ID
+        //.........................
+      FROM testtable
+  <if test='name != null'> 	AND USER_NAME = #{name} </if>
+   </select>
+Colored by Color Scripter
+cs
+
+
+그렇다면 노란색 부분을 보자. if문안에 name은 nameVO안의 필드이다. 이런식으로 써주면 VO를 받는것을 처리할 수 있다.
+
+
+
+그런데 parameterType의 nameVO는 그냥 나온것이 아니다.
+
+
+
+sql-mapper-config.xml을 보자.
+
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ 
+<configuration>
+    <typeAliases>
+        <typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+        <typeAlias alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
+        <typeAlias alias="sampleVO" type="egovframework.example.sample.service.SampleVO"/>
+        <typeAlias alias="nameVO" type="egovframework.example.test.service.NameVO"/>
+        
+    </typeAliases>
+</configuration>
+Colored by Color Scripter
+cs
+
+
+노란색 부분을 추가해야 한다. alias는 사용할 이름을 원하는대로 지정하는 것이고 type에는 경로를 써준다. 이렇게 함으로써 mybatis에서 nameVO를 쓸 수 있게 된다.
