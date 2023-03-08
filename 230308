@@ -248,3 +248,62 @@ document.queryselector("#callback-btn")
 첫 번째로 버튼의 id 값을 사용하여 버튼을 선택하고 addEventListener 메소드를 사용하여 이벤트 리스너를 추가했습니다. 
 이벤트 리스너 함수는 두 개의 파라미터를 필요로 합니다. 첫 번째 파라미터로는 이벤트의 타입인 
 “클릭”이고 두 번째 파라미터는 버튼이 클릭되었을 때 메시지를 남기는 콜백 함수입니다.
+
+
+⇒ dispatcher-servlet.xml에 등록해야함
+
+⇒ 컨트롤러 매핑url에 유익하게 쓰임
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c62f2b3c-9d98-4748-877f-b9b66f19bba9/Untitled.png)
+
+⇒ 회사코드도 참조
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5f8a6453-8598-4467-869e-dcfa58a9dd64/Untitled.png)
+
+⇒ .do가 호출되기 위해서는 index.html에 text/javascript형식의 스크립트의 문서경로를 지정해둬야한다.
+
+> tip!
+> 
+> 
+> <script type="text/javascript"> 의 의미 ?
+> 
+> 텍스트를 통해 자바스크립트를 구현하겠다는 뜻
+> 
+> ...
+> 
+> HTML 문서에 자바스크립트를 로딩하는 방법에는 3가지 정도가 있는데
+> 
+> 1. <script type="text/javascript">
+> 2. <script language="javascript">
+> 3. <script>
+> 
+> # **결론**
+> 
+> **표준 => 1**
+> 
+> **3으로 작성하면 브라우저마다 기본 설정된 값으로 해석됨**
+> 
+> **HTML5 이상부터는 3으로 표기해도 1로 해석**
+> 
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/41ad4744-8c6f-4c93-ba05-c0dc97590906/Untitled.png)
+
+##servletMapping지정
+
+하지만 어노테이션 컨트롤러는 자동으로 서블릿매핑을 해준다.
+
+## **서블릿 매핑(Servlet Mapping) 이란?**
+
+**예를 들어 설명하자면,**
+
+**작성한 servlet에 접근을 하기 위해 해당 servlet에 패키지명부터 클래스명까지**
+
+**모두 입력해주어야 한다.**
+
+**이렇게 된다면 보안상의 문제(디렉토리 구조 노출)와**
+
+**접근의 불편함(클래스명을 다 입력해주어야 함)이 있다.**
+
+**이때 개발자가 간단한 URL을 접목시켜 위의 불편사항들을 해결할 수 있다.**
+
+**이것이 서블릿 매핑이다.**
