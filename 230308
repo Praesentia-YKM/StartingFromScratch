@@ -307,3 +307,18 @@ document.queryselector("#callback-btn")
 **이때 개발자가 간단한 URL을 접목시켜 위의 불편사항들을 해결할 수 있다.**
 
 **이것이 서블릿 매핑이다.**
+##list.list.do가 호출되는 원리
+
+원래 dispatcher-sevlet에서는 url 기본 매핑이 /WEB-INF/jsp/ .jsp 로 호출되게 되어있다(아래회사코드 참조)
+
+```xml
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	    <property name="order" value="1" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+</bean>
+```
+
+자 그럼 화면 호출이 어떻게 되는지 생각해보자
+
+기본적으로 화면을 부르면 기본jsp페이지가 로드 될 것이다. 하지만 그전에 우리는 HttpServeltRequest와 response를 통해 기본페이지가 로드되면 우리는 [list.do](http://list.do) url을 던진다. 우리는 그걸 컨트롤러에서 RequestMapping어노테이션으로 서블릿매핑 한다.
