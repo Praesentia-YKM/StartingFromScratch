@@ -1,0 +1,57 @@
+자바스크립트 익명 함수는 함수명 대신 변수명에 함수 코드를 저장하는 구현 방식이다. 익명 함수의 소스 코드는 변수값이므로 끝에 세미콜론 ; 을 대입한다. 익명 함수는 호출 시 변수명을 함수명처럼 사용하면 된다.
+
+## 구조
+
+```
+  var 변수명 = function( 매개변수 )
+  {
+    실행문;
+  };
+```
+
+이 경우 변수값을 변수에 넣은 형태이므로 함수 코드 끝에 세미콜론을 붙여준다.
+
+hello라는 변수명에 "Hello World!"라는 문자가 출력되는 함수 코드를 저장했다.hello()로 익명 함수를 호출하면, 소스코드가 실행된다.
+
+```
+<script>
+  // 익명 함수 선언 및 변수에 대입
+  var hello = function( ) {
+    document.write("Hello World!");
+  };
+
+//익명 함수 변수명으로 호출
+hello();
+// result : Hello World!
+</script>
+```
+
+## 익명함수 + 반환문
+
+return 제어문으로 반환이 되는 경우는 익명 함수를 다른 명령어에 대입시키면 된다.함수를 괄호와 함께 변수처럼 원하는 곳에 기입하면 된다.
+
+```
+// 익명 함수 선언 및 변수에 대입
+var hi = function( ) {
+  var string = "Hello World!";
+  return string;
+};
+
+//익명 함수의 변수를 출력
+document.write( hi( ) );
+// result : Hello World!
+```
+
+익명 함수의 매개 변수와 반환문이 모두 있는 경우에도 정상 함수와 똑같이 작동한다.
+
+```
+//익명 함수 선언 및 매개변수 사용
+var fusion = function( a, b ) {
+  var z = a + b;
+  return z;
+};
+
+//익명 함수의 변수를 출력 및 인수 입력
+document.write( fusion( "Hello", "World!" ) );
+// result : HelloWorld!
+```
