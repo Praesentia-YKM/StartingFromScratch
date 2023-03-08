@@ -733,3 +733,33 @@ $.each() 메서드는 object 와 배열 모두에서 사용할 수 있는 일반
 첫 번째 매개변수로 배열이나 객체를 받습니다.
 
 그리고 두번째 매개변수로 콜백함수를 받으며 콜백함수의 인자로는 인덱스와 값을 인자로 갖습니다.
+
+### **@*JsonIgnoreProperties***
+
+**클래스 레벨** 애노테이션으로, Jackson이 무시할 property 리스트를 지정할 수 있다. **ignoreUnkown=true** 속성은 JSON 입력 값에 대하여 Mapping 시 클래스에 선언되지 않은 property를 무시한다.
+
+> UnrecognizedPropertyException
+> 
+
+```java
+@JsonIgnoreProperties({ "id" })
+public class BeanWithIgnore {
+    public int id;
+    public String name;
+}
+```
+
+```java
+/** @JsonIgnoreProperties 적용 전 */
+{
+  "id" : 1,
+  "name" : "My Bean"
+}
+
+/** @JsonIgnoreProperties 적용 후 */
+{
+  "name" : "My Bean"
+}
+```
+
+- JS DATE()
