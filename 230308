@@ -610,3 +610,116 @@ cs
 
 
 노란색 부분을 추가해야 한다. alias는 사용할 이름을 원하는대로 지정하는 것이고 type에는 경로를 써준다. 이렇게 함으로써 mybatis에서 nameVO를 쓸 수 있게 된다.
+
+## **[점 표기법 (Dot Notation) & 대괄호 표기법 (Square Bracket Notation)](https://3d-yeju.tistory.com/28#%EC%A-%--%--%ED%--%-C%EA%B-%B-%EB%B-%--%---Dot%--Notation-%--%--%--%EB%-C%--%EA%B-%--%ED%--%B-%--%ED%--%-C%EA%B-%B-%EB%B-%--%---Square%--Bracket%--Notation-)**
+
+점 또는 괄호 표기법으로 객체의 속성에 접근할 수 있다. 점 표기점은 key의 값을 그대로 적어주고 괄호 표기법은 key 값을 문자열로 적어주어야 한다.
+
+```jsx
+object.property
+object['property']
+```
+
+### **[점 표기법](https://3d-yeju.tistory.com/28#%EC%A-%--%--%ED%--%-C%EA%B-%B-%EB%B-%--%C-%A-)**
+
+점 표기법은 쓰기 속도가 빠르고 읽기가 쉽다.
+
+```jsx
+var person = {
+living : true,
+age : 33,
+gender : 'male'
+}
+
+console.log(person.living);
+console.log(person.age);
+console.log(person.gender);
+
+---------------------------------------------
+//객체 안의 객체 접근let myStorage = {
+  "car": {
+    "inside": {
+      "glove box": "maps",
+      "seat": "crumbs"
+     },
+    "outside": {
+      "trunk": "jack"
+    }
+  }
+};
+
+console.log(myStorage.car.inside.seat);
+```
+
+## [](https://3d-yeju.tistory.com/28#%C-%A-)
+
+### **[대괄호 표기법](https://3d-yeju.tistory.com/28#%EB%-C%--%EA%B-%--%ED%--%B-%--%ED%--%-C%EA%B-%B-%EB%B-%--%C-%A-)**
+
+```jsx
+var person = {
+living : true,
+age : 33,
+gender : 'male'
+};
+
+console.log(person['living']);
+console.log(person['age']);
+console.log(person['gender']);
+
+---------------------------------------------
+//객체 안의 객체 접근let myStorage = {
+  "car": {
+    "inside": {
+      "glove box": "maps",
+      "seat": "crumbs"
+     },
+    "outside": {
+      "trunk": "jack"
+    }
+  }
+};
+
+console.log(myStorage["car"]["inside"]["glove box"]);
+```
+
+## [](https://3d-yeju.tistory.com/28#%C-%A-)
+
+## **[객체 접근시 대괄호 표기법만 쓸 수 있는 경우](https://3d-yeju.tistory.com/28#%EA%B-%-D%EC%B-%B-%--%EC%A-%--%EA%B-%BC%EC%-B%-C%--%EB%-C%--%EA%B-%--%ED%--%B-%--%ED%--%-C%EA%B-%B-%EB%B-%--%EB%A-%-C%--%EC%--%B-%--%EC%--%--%--%EC%-E%--%EB%-A%--%--%EA%B-%BD%EC%-A%B-%--)**
+
+### **[식별자로 사용할 수 없는 key 이름을 사용하는 경우](https://3d-yeju.tistory.com/28#%EC%-B%-D%EB%B-%--%EC%-E%--%EB%A-%-C%--%EC%--%AC%EC%-A%A-%ED%--%A-%--%EC%--%--%--%EC%--%--%EB%-A%--%--key%--%EC%-D%B-%EB%A-%--%EC%-D%--%--%EC%--%AC%EC%-A%A-%ED%--%--%EB%-A%--%--%EA%B-%BD%EC%-A%B-)**
+
+객체의 key는 문자열로서 따옴표(" ")가 생략되어 작성이 되는데 key이름에 공백을 주고 싶을 때, 따옴표안에 적어주면 된다. 이 때, 괄호 표기법은 공백이 있는 key 값에 접근이 가능하지만 점 표기법은 접근할 수 없다. 또한 숫자와 같이 식별자로 사용할 수 없는 속성의 이름도 대괄호 표기법에서는 사용할 수 있다.
+
+```jsx
+var cody = {
+  living : true,
+  "person age" : 33,
+  1234 : 'male',
+  }
+
+  console.log(cody['person age']);//33console.log(cody.person age);//Syntax Error
+
+  console.log(cody['1234']);//maleconsole.log(cody.1234);//Syntax Error
+```
+
+**💡자바스크립트 식별자로 사용할 수 없는 것들**
+
+1. 키워드를 사용해선 안된다.2. 숫자로 시작하면 안된다.3. 특수문자는 _과 $만 허용된다.4. 공백 문자를 포함할 수 없다.
+
+---
+
+### **[변수를 key 이름으로 사용하는 경우](https://3d-yeju.tistory.com/28#%EB%B-%--%EC%--%--%EB%A-%BC%--key%--%EC%-D%B-%EB%A-%--%EC%-C%BC%EB%A-%-C%--%EC%--%AC%EC%-A%A-%ED%--%--%EB%-A%--%--%EA%B-%BD%EC%-A%B-%C-%A-)**
+
+변수를 문자열뿐만 아니라 모든 표현식의 평가 결과를 프로퍼티의 키값으로 사용할 수 있다.
+
+```jsx
+let user = {
+  name: "John",
+  age: 30
+};
+
+let key = "gender";
+user[key]="male";
+
+console.log(user);//{name: "John", age: 30, gender: "male"}
+```
