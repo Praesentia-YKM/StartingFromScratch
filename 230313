@@ -127,3 +127,154 @@
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a570cbef-0acf-49ee-a434-d16862814f1e/Untitled.png)
     
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/be4088f3-ec56-4b29-a9f3-f08e13da8a71/Untitled.png)
+
+
+- 오라클 설치
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/011e0f6d-2c2a-44dc-9312-b6dce825585c/Untitled.png)
+    
+    - 11g든 21c든 버전은 상관없음
+    
+    <aside>
+    💡 1. 오라클 데이터베이스 11g설치
+    2. sql developer & debeaver 사용 (둘중하나)
+    3.
+    
+    </aside>
+    
+    XE버전은 R2랑 다른데 수업시간엔 R2로 한다. XE버전 다운 받고 싶으면 아래 파일 참고
+    
+    []()
+    
+    []()
+    
+    [[성원]chap02_오라클 11g XE(express) 환경 구축_org.pdf](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5c797277-9a02-4cce-89e4-8681d12dc1cf/%EC%84%B1%EC%9B%90chap02_%EC%98%A4%EB%9D%BC%ED%81%B4_11g_XE(express)_%ED%99%98%EA%B2%BD_%EA%B5%AC%EC%B6%95_org.pdf)
+    
+- STEP
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/da6111d2-688f-40c5-9fcb-a599a20fe54e/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/78c873a1-7858-40be-ae27-a8b710a3bdd5/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/46ac5263-9d2e-4c97-b55b-a157dcc3c69f/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/dbacb17c-0485-43e1-8f02-e961e6e0ba27/Untitled.png)
+    
+    → 외장하드가 아닌 C나D로 하자
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d6dba1da-9bc6-414a-b587-c2046f580267/Untitled.png)
+    
+    → 비번 1234
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/19714373-b95c-4c60-b6bd-a0203f013ffe/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f6cc4775-5503-4335-9388-ad61c34d1dcb/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8a32af8e-6fb4-4523-8adc-d597ccecf015/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9f512679-a106-4ca4-8ef0-4ef9bb365135/Untitled.png)
+    
+    ⇒ PC이름은 영문이여야 에러가 없다.
+    
+
+## CMD를 통한 오라클 편집 툴 SQL PLUS접근
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/37c63ed1-97eb-4c1a-82d1-4ea7e0d558a2/Untitled.png)
+
+```jsx
+ALTER USER SCOTT [ 사용자가 SCOTT이고 ]
+IDENTIFIED BY TIGER [ 그 사용자의 비밀번호가 TIGER이고 ]
+ACCOUNT UNLOCK ; [ 사용자 계정 잠근해제 ]
+```
+
+```jsx
+GRANT CONNECT, RESOURCE , DBA TO SCOTT; [ 접속,자원,DBA에 관한 권한을 부여 SCOTT에게 ]
+```
+
+```jsx
+CONN SCOTT/TIGER [연결하겠다 , SCOTT계정에 비밀번호 TIGER ]
+```
+
+```jsx
+DESC EMP;
+SHOW USER;
+```
+
+## SQL PLUS에서 바로 접근
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/33fea7e2-9cf4-4d53-b1ce-0aeb349e1265/Untitled.png)
+
+## SQL Developer를 통한 접근
+
+#SID : 시스템 식별자
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/27489da1-804d-42c4-ad35-9abac0af2a61/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/477a4240-b9a7-4b81-a0de-846e1d85fc97/Untitled.png)
+
+⇒ SCOTT : 비번 ( 대문자 ) TIGER
+
+⇒ SYSTEM : 1234
+
+## DBeaver를 통한 접근
+
+설치
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c8016e6a-95a6-42ce-a0ef-4d0ddfb30476/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c1aa5594-cbd2-4b7f-a253-124289fa6a8f/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ddc3ec10-9518-46c8-afa7-ad6d7a86d453/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/30bf2113-4bd9-4374-9d12-0553d9e3fc59/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/71cc90ea-e9a2-44a1-bded-e155f6d77202/Untitled.png)
+
+##DESC 안 먹는다 WHY?
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fcbeaf85-69ec-497e-a210-8d0241f846bf/Untitled.png)
+
+## HR 계정 생성
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/233c2f38-2dfd-4e3e-9656-7a27c3bc65d6/Untitled.png)
+
+```jsx
+C:\Users\User>SQLPLUS SYS AS SYSDBA
+
+SQL*Plus: Release 11.2.0.1.0 Production on 월 3월 13 21:33:17 2023
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+비밀번호 입력:
+
+다음에 접속됨:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SQL> ALTER USER HR
+  2  IDENTIFIED BY HR
+  3  ACCOUNT UNLOCK;
+
+사용자가 변경되었습니다.
+
+SQL> GRANT CONNECT , RESOURCE , DBA TO HR
+  2  ;
+
+권한이 부여되었습니다.
+
+SQL> CONN HR/HR
+```
+
+→ EMP는 SCOTT계정의 기본 테이블
+
+HR계정의 기본 테이블 JOBS
+
+⇒ HR 의 비번 : HR( 대문자 주의)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ab8435d9-d097-4f25-b6c5-97f4f717efbb/Untitled.png)
+
+> 데이터베이스 스키마란? 
+
+데이터베이스 스키마는 **관계형 데이터베이스에서 데이터가 구조화되는 방식을 정의**
+합니다. 여기에는 *테이블 이름, 필드, 데이터 유형, 그리고 이러한 엔티티 간의 관계* 등 논리적 제약조건이 포함됩니다.
+>
