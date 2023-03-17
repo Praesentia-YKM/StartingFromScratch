@@ -163,3 +163,134 @@
     ⇒ 최종테스트(lombok을 통해 getter가 자동 호출됐는지 확인) [ lombok을 통한 setter ]
     
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/677258f7-d2d9-4977-91b9-1255faf9c54c/Untitled.png)
+    
+    
+    - 프로젝트 열기
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/437a33b7-c510-4bd4-b181-84c64cb5d7de/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/82919d44-c943-4694-b8d1-6e1d402f5ed1/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0990400b-4b09-48cd-930b-274d95e9dda4/Untitled.png)
+    
+- maven이란
+    
+    > 크게 2가지 : 라이브러리관리 , 배포를위한 빌드
+    > 
+    - [ ]  build부분!
+        
+        ⇒ 실행을 할 수 있어야 한다.
+        
+        서블릿 ⇒ web → 브라우저(was)
+        
+        즉, 이클립스(local)을 was [ 배포 ] 시켜야한다.
+        
+        개념!!
+        
+        <aside>
+        🤔 # web.xml ⇒ 자바파일 외 나머지들
+        
+        # 자바파일→컴파일 → classes
+        
+        #lib → jar ( maven dependencies아래있는 jar을 톰켓이 빌드해서 web-inf아래에 뿌려준다)
+        
+        #maven_home → C:\Users\로그인아이디\~아래에 있음
+        
+        </aside>
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ab191bb0-8bcb-4d62-a20f-b991dc080dde/Untitled.png)
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/90ab0450-11d8-46bf-86d5-83d61471a8e6/Untitled.png)
+        
+        [[Eclipse] 이클립스 maven repository 경로 설정 (settings.xml)](https://mine-it-record.tistory.com/160)
+        
+        ⇒ 이 블로그에서 xml 세팅 코드 긁어다가 수동으로 repository아래 settings.xml생성 후 코드 작성
+        
+    
+    <offline>false가 뭐냐면 → maven은 인터넷이 무조건 필요하다 그래서 넥서스라고 사설 레포즈토리를 만든다음 거기에 다 올려둔다. 그러고 싶을때 하는거다. 어쩌피 실습환경은 인터넷 되니까 필요없는 조건이긴함. 하지만 그대로 진행
+    
+    ⇒ 자 이제 이클립스에서 user settings변경
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f81ca1a4-adcd-4822-917c-def815117b20/Untitled.png)
+    
+    (maven은 설정파일을 바꿨으면 update 해줘야함 [아래사진참고]
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b5b462d3-e299-4bf0-accd-ac54f54d0718/Untitled.png)
+    
+    그럼 뭐가 생김을 알 수 있따. 
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/12f092ac-9745-41db-b285-6007bc8a9d37/Untitled.png)
+    
+    #POM.XML열기
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b3080b01-ad1c-4018-a655-a6df1ce7bf70/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/959b463d-5d44-46c0-b341-bbfbc68a0841/Untitled.png)
+    
+    ⇒ 프로퍼티스 태그안에 내용을 변수화해서 디펜던시 아래 <version>에 적용한거다.
+    
+    pom.xml알아보기 → jar에 의존성까지 고려해서 jar가 자동으로 등록된다.(라이브러리관리)
+    
+    ctrl + f 로 스페이스바 처리를 tab키로 바꾸는 방법(xml파일이나 jsp등 인덴테이션이 중요할떄 활용가능)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/86afb2d8-9421-4983-9634-16cfc2d43106/Untitled.png)
+    
+    ##우리는 openJDK12버전인데 지금 현재 우리 프로젝트의 컴파일레벨이 너무 낮다. 올려야함
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c8a7f16e-7e68-41c8-8ef9-4c8ec19de778/Untitled.png)
+    
+    ⇒ 12로 변경
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1731e1c4-aeea-4274-bf8f-4f3a8b8ea035/Untitled.png)
+    
+    ⇒ 저장 후 update project
+    
+    ##서버적용
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3a029956-658e-4679-a60c-b8d162d6bf0f/Untitled.png)
+    
+    ##preferences : 이클립스의 기본설정(window탭)
+    
+    설정을 바꾸고싶으면 properties에서 바꾼다 (프로젝트 우클릭)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1ab5707b-cd1f-42c0-8c04-f764591b614f/Untitled.png)
+    
+    ⇒ context_path라고 부른다 : 이게 뭘까
+    
+    ⇒ / 로 설정
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d5fe4dad-679f-4179-ad17-0c9f60fdc12a/Untitled.png)
+    
+    ⇒ 톰캣이 올라가는 과정 : 빨간거
+    
+    그 하단에 검정들은 스프링프레임워크가 올라가는 것
+    
+    business , service 나누기 → aop
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d5eb4479-247d-4c43-821a-b3a282b67d3b/Untitled.png)
+    
+    ⇒ 스프링에 등록됨
+    
+    MVC
+    
+    : Model View Controller
+    
+    url을 통해( MVC딴)에서 들어왔다 → 무조건 @Controller박아야한다. url해석함
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/492978ac-5fa1-4c2e-8e8c-9fc3af699aec/Untitled.png)
+    
+- lombok이란
+    
+    자동으로 private변수만 vo에 설정해줘도 getter setter만들어준다.
+    
+    ##설치
+    
+    [Project Lombok](https://projectlombok.org/)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1aec59b8-ff38-4e07-86ea-08c7d8600e97/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c7b06daf-f047-4a53-b51e-4dfeac5fd91f/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a570cbef-0acf-49ee-a434-d16862814f1e/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/be4088f3-ec56-4b29-a9f3-f08e13da8a71/Untitled.png)
