@@ -401,3 +401,37 @@
     따라서 생기는 this의 시점 변화
     
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ff931e5f-be29-4ff0-b495-f1be03f8f049/Untitled.png)
+    
+    
+    > ##***HttpRequest, HttpResponse 구조***
+> 
+> 
+> 여기서는 위 예시와 같은 HttpRequest와 HttpResponse의 구조에 대해서도 함께 살펴보면 좋은데요.
+> 
+> HttpRequest는 start line, headers, body 세 부분으로 나누어져 있으며, HttpResponse 역시 비슷하게 status line, headers, body 세 부분으로 나누어져 있습니다.
+> 
+> 여기서 주목해 봐야 하는 부분이 바로 body인데요.
+> 
+> 앞서 살펴봤던 클라이언트와 서버 간의 HTTP 통신에서 요청과 응답을 보낼 때, 필요한 데이터를 담아서 보내는 공간이 바로 body입니다.
+> 
+> 이때 요청하는 요청 본문을 **requestBody**, 응답하는 응답 본문을 **responseBody**라고 하는데요.
+> 
+> 본문에 담기는 데이터 형식은 여러 가지가 있지만 가장 대표적으로 사용되는 것이 **JSON**이며, **xml** 형식도 사용됩니다.
+> 
+> ---
+> 
+> ![https://blog.kakaocdn.net/dn/rRUlr/btrBT4GImlA/vofQjyLpcXZ9jualJqkIhK/img.png](https://blog.kakaocdn.net/dn/rRUlr/btrBT4GImlA/vofQjyLpcXZ9jualJqkIhK/img.png)
+> 
+> @RequestBody, @ResponseBody
+> 
+> ### **@RequestBody, @ResponseBody Annotation**
+> 
+> Spring에서는 @RequestBody, @ResponseBody 어노테이션을 명시함으로써 MessageConverter를 통한 데이터 변환 과정을 거치게 되는데요.
+> 
+> 예를 들어서 클라이언트에서 서버에 JSON 형식의 requestBody로 요청 데이터를 전송했을 때, Java에서는 해당 JSON 형식의 데이터를 받기 위해서 JSON -> Java Object로의 변환이 필요합니다.
+> 
+> 마찬가지로 요청된 데이터를 처리 후, 서버에서 클라이언트로 다시 응답 데이터 responseBody를 보낼 때도 Java Object에서 JSON 또는 XML 같은 형식으로의 변환이 필요합니다. 이러한 과정을 해당 어노테이션들이 처리해주는 것입니다.
+> 
+> *(RequestMappingHandlerAdapter에는 요청 또는 응답의 데이터 형식에 따른 여러 개의 메시지 변환기 HttpMessageConverter가 등록되어 있습니다.)*
+> 
+- [ ]  Map형태로 반환할 수 있는 이유( ResponseBody가 형변환해줌-MessageConverter를 통해서)
