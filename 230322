@@ -1,0 +1,139 @@
+- (app_dhtmlxApi.js)grid의 헤더 ( 컬럼명 ) 정보 다 가져오기 regrdKey() , indexOf
+    
+    `var gridKeyStr = mygrid.reGrdKey();`
+    
+    +
+    
+    그 안에서 내가 찾고자 하는 문자열 찾는 법
+    
+    <aside>
+    💡 `if (gridKeyStr.indexOf("rowStat") >= 0)`
+    
+    </aside>
+    
+    ## **indexOf() 함수**
+    
+    > string.**indexOf**
+    > 
+    - indexOf 함수
+        - 문자열(string)에서 특정 문자열(searchvalue)을 찾고, 검색된 문자열이 ’첫번째’로 나타나는 위치 index를 리턴합니다.
+    - 파라미터
+        - **searchvalue** : 필수 입력값, 찾을 문자열
+        - **position** : optional, 기본값은 0, string에서 searchvalue를 찾기 시작할 위치
+    - 찾는 문자열이 없으면 -1을 리턴합니다. ( 0보다 큰 지 비교하면 됨)
+    - 문자열을 찾을 때 대소문자를 구분합니다.
+- 컬럼값에 대한 value ⇒ getValue()
+    
+    <aside>
+    💡 `return mygrid.cells(rowId, mygrid.getColIndexById(columName))      .getValue();`
+    
+    </aside>
+    
+- JS 객체 다루는 법
+    
+    ## **❗️객체를 위한 for문 사용법**
+    
+    **배열과 객체, 반복문을 응용하여 대량의 정보를 다룰 수 있다.객체에서 사용하는 반복문은 for in
+        ◦ `for( let key in obj )`
+        ◦ `for in`문은 객체안에 모든 키를 찾아 ‘key’라는 변수에 할당한다.배열에서 사용하는 반복문은 for of
+        ◦ `for( let el of arr )`
+        ◦ `for of` 문은 배열의 ‘index’ 만큼 반복하여 엘리먼트를 ‘el’라는 변수에 할당한다.**
+    
+    ---
+    
+    ## **⚡️ 객체(Object)의 메소드(Method)**
+    
+    ### **❗️Object.keys(obj)**
+    
+    **객체(object)의 속성(property)의 이름(key)을 배열(array)로 반환(return)한다.**
+    
+    [Object.keys() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys)
+    
+    ### **❗️Object.values(obj)**
+    
+    **객체(object)의 속성(property)의 값(values)을 배열(array)로 반환(return)한다.**
+    
+    [Object.values() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Object/values)
+    
+- 재무 + 회계
+    
+    재무 : 재물에 관한 업무
+    
+    회계 : 회사의 경영상황을 여러 이해당사자들에게 수치적으로 표현해주는 것.
+    
+- 사업코드관리 ( 사업의 크기 비교)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/de7f2a63-e3de-4e3f-a0fb-decab62357d8/Untitled.png)
+    
+- 예산과목이란
+    
+    ✔ 예산과목
+    예산은 그 내용을 명백히 하기 위하여 일정한 기준에 의하여 구분하게 되는데 세입예산과목과 세출예산과목으로 구분됨.
+    
+    세입예산과목은 장, 관, 항, 목별로 분류되고, 세출예산과목은 목그룹, 편성목, 통계목별로 분류됨.
+    
+- 물려있는 값들 생각하기
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/932e93e6-353e-43f5-b86f-2938a75b70cd/Untitled.png)
+    
+    ⇒ 재원구분이 변경되면 재원사업코드도 변경되야 하는 것처럼
+    
+    ⇒ 재원사업코드가 변경되어도 재원구분이 변경되어야 한다.
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/999b05f5-7bdb-4333-a9c3-a7ca661d6083/Untitled.png)
+    
+- 전표 ( 돈을 어떻게 썻는지 남기는 기록 : 내가 지출쪽 데이터를 바꿨으면 전표도 수정해야 함을 인지해야 한다)
+    - 가전표 : `SELECT *FROM EXP_EXP_PRVSLP`
+    - 매인 전표: `SELECT *FROM ACC_SLIP`  → slipNo
+    - 매인 전표 dts : `SELECT *FROM ACC_SLIPDTS`
+- 지출 결의(EXP_RES)에는 SLIP ( 전표 )에 대한 키값들이 들어있다.
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/999b05f5-7bdb-4333-a9c3-a7ca661d6083/Untitled.png)
+    
+- NO를 where조건에 걸때는 SEQ를 걸어야지 ACC_YY를 걸필요가 없다
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/193351a3-1115-4e0d-9716-4ef4e75112e2/Untitled.png)
+    
+    ⇒ 어쩌피 NO안에는 고유의 ACC_YY정보가 들어있다.
+    
+- 지출 결의에서 사업명 변경시
+    
+    [ 품의~결의, 전표, 재원 ]자료수정
+    
+    1. 사업에 대한 정보는 어디서 나오는가?
+        
+        ```jsx
+        SELECT *
+        FROM BDG_DTL_BIZ
+        WHERE ACC_YY=2023; --010101D DTL_BIZ_CD 찾기
+        ```
+        
+    2. 
+    
+    SELECT *
+    FROM EXP_CST_SBJ
+    WHERE EXP_CST_NO=20230000125
+    
+    SELECT *
+    FROM EXP_CST_FRSC
+    WHERE EXP_CST_NO=20230000125
+    
+    SELECT *
+    FROM EXP_OACT_SBJ
+    WHERE EXP_OACT_NO=20230000136
+    
+    SELECT *
+    FROM EXP_OACT_FRSC
+    WHERE EXP_OACT_NO=20230000136
+    
+    SELECT *
+    FROM EXP_RES_FRSC
+    WHERE EXP_RES_NO=20230000144;
+    
+    SELECT *
+    FROM ACC_SLIPDTS
+    WHERE SLIP_NO=20230000320;
+    
+- 제이쿼리 ID ,클래스 , NAME접근  ( CSS와 동일)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/812482c3-5e57-4ac6-b247-54e7c812ea9e/Untitled.png)
