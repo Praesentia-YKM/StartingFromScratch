@@ -1,0 +1,273 @@
+- 공통유틸(ComUtil.java)
+    - 스트링 치환
+    - object형이 null이거나 할때리턴
+    - 문자열이 공백값이 있는지 확인
+    - 문자열을 숫자로 바꾸어줍니다. null이거나 공백일시 0으로 바꾸어줍니다.
+    - 공백을 제거합니다.
+    - 스트링 치환
+    - Object를 기준으로 replace를 실행한다.
+    - 문자열에서 특정문자 삭제
+    - 문자열을 숫자로 바꾸어줍니다. null이거나 공백일시 0으로 바꾸어줍니다.
+    - 숫자변환가능한 문자열을  LONG으로 변환한다.
+    - 숫자변환가능한 문자열을  Double로 변환한다.
+    - 객체의 내용을 Map으로 리턴한다.
+    - 숫자 금액을 한글머니로 변경
+    - 해당문자열을 대문자로 캐시팅해준다.
+    - 지정한 자릿수 만큼 앞자리 채움
+    - 전화번호에 하이픈 넣기
+    - 바이트단위로 한글 문자열 자르기
+    - 데이터 컬럼 camelCase로 변환
+    - ResultSet을 Row마다 Map에 담고 List에 다시 저장.
+- 예산편성 흐름파악2
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/61cf6f83-9d29-4d0d-935c-7fae6f745248/Untitled.png)
+    
+    - 사업코드관리
+        
+        > 예산편성을 위한 사업정보를 구조화해서 등록하는 화면. 신규 사업을 추진하거나 사업명이 변경된 경우 사업정보를 등록합니다.
+        > 
+        - 그리드 선택 이벤트(상태변경시 이벤트 발생)→ ( C → U 로 바뀌는 느낌?)
+            
+            ```jsx
+            //선택
+            grid0011.reAttachEvent("onSelectStateChanged", function(rowId){
+            	fn_search0012();
+            });
+            ```
+            
+        - `onFilterStart` 이벤트에서 그리드내에 검색기능 추가
+            
+            ```jsx
+            grid0012.attachEvent("onFilterStart", function(dataLength, data) {
+            				if(data[0] != "" && data[0] != null ) {
+            					//검색한 문자가 들어있는 배열만 반환
+            					const filterMngClsData = selectMngBizData.filter(function(val, index, arr){
+            						return (val['mngBizNm'].indexOf(data[0]) != -1);
+            					});
+            					grid0012.reGridBind(filterMngClsData);
+            				}
+            				else {
+            					//검색 영역에 아무것도 입력하지 않은 경우
+            					grid0012.reGridBind(selectMngBizData);
+            				}
+            			});
+            ```
+            
+        - 저장로직 진행시 고려해야 하는 사항
+            - jsp에서 체크사항
+                - [ ]  필수 입력 요소 체크
+                - [ ]  중복확인(****Object.keys() 메서드 를 통해 데이터 전체 중 key값의 .length가 1이상이면 중복데이터가 잇는 것****
+                    - key를 검색하고
+                        
+                        ```jsx
+                        saveCheck = fn_saveCheck('grid0011', grid0011, dataList);
+                        
+                        var fn_saveCheck = function(gridName , grid, allDataArr, dataList) {
+                        //중복체크
+                        			if(Object.keys(allDataArr).length > 1) {
+                        				//신규추가건이 아닌 경우
+                        				result = allDataArr.reduce(function(tmpArr, allGridEl) {
+                        					if (!tmpArr[allGridEl[chkKey[0]]]) {
+                        						tmpArr[allGridEl[chkKey[0]]] = 0;
+                        					}
+                        					tmpArr[allGridEl[chkKey[0]]] += 1;
+                        					return tmpArr;
+                        				}, {});
+                        				for(let key in result) {
+                        					if(result[key] > 1) {
+                        						//중복되는 항목이 존재하는 경우
+                        						chkResult = true;
+                        					}
+                        				}
+                        			}
+                        }
+                        ```
+                        
+            - sevice에서 체크사항
+                - [ ]  그리드의 상태값에 따른 데이터 저장 분류해야 함
+            - reduce함수
+                
+                > // reduce
+                
+                const numbers = [1, 2, 3, 4];
+                > 
+                > 
+                > numbers.reduce((누산값, 현재요소값, 현재요소의index, 현재배열) => {
+                > return 다음누산값;
+                > }, 초기누산값);
+                > 
+                
+                ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ecb9d6cc-e1f6-4041-ac01-4e4481672881/Untitled.png)
+                
+                or  
+                
+                ### reduce함수 안에서 다른 함수 호출하기
+                
+                한 함수의 계산 값을 입력받아 다른 함수에 넣고, 그 값을 입력받아 또 다른 함수에 넣으려면
+                
+                - 익명함수 활용
+                    
+                    <aside>
+                    💡 자바스크립트 익명 함수는 함수명 대신 변수명에 함수 코드를 저장하는 구현 방식이다. 익명 함수의 소스 코드는 변수값이므로 끝에 세미콜론 ; 을 대입한다. 익명 함수는 호출 시 변수명을 함수명처럼 사용하면 된다.
+                    
+                    </aside>
+                    
+                - 간결하게
+                    
+                    위의 과정을 보기 가독성있고, 간결하게 정리하는 방법은 없을까?reduce를 활용하여 위에 코드를 정리해보자.
+                    
+                    ```
+                    // 여러가지 함수를 배열에 담는다.
+                    let pipeline = [
+                      increment,
+                      increment,
+                      increment,
+                      decrement,
+                      double,
+                      double,
+                      halve
+                    ];
+                    
+                    // 배열의 요소를 함수 이름으로 하고
+                    // reduce 함수 안에서 그 함수를 호출한다.
+                    // 축적된 값은 함수의 전달인자로 전달한다.
+                    let final_value = pipeline.reduce(function(acc, fn){
+                      return fn(acc);
+                    }, initial_value);
+                    
+                    console.log(final_value); // 6
+                    ```
+                    
+                    위와 같이 reduce의 전달인자로 함수를 받고, 축적된 값을 전달받은 함수의 인자로 반복적으로 받는 로직을 만들어 위에 복잡한 코드를 정리할 수 있겠다.👍
+                    
+        - 정책 사업 저장시 반영되는 테이블
+            
+            <aside>
+            💡 **/* 정책사업 */
+            SELECT *
+            FROM BDG_MNG_CLS;**
+            
+            **/* 단위사업 */
+            SELECT *
+            FROM BDG_MNG_BIZ;**
+            
+            **/* 세부사업 */
+            SELECT *
+            FROM BDG_DTL_BIZ;**
+            
+            </aside>
+            
+        - 컬럼의 값 가져오기 함수(많이 쓰임- 상위그리드의 값 가져올때도 이 함수가 쓰임)
+            
+            `reGetCellRowIdData` → 후 `reSetCellRowIdData` 
+            
+            ```jsx
+            const selectRow = grid0021.getSelectedRowId();
+            const dtlBizCd  = grid0021.reGetCellRowIdData(selectRow,"dtlBizCd");
+            grid0022.reSetCellRowIdData(nRowId, "uprBizCd", dtlBizCd);
+            ```
+            
+            이런식으로 상위그리드(0021)의 dtlBizCd를 하위 그리드 uprBizCd라는 곳에 뿌린다.
+            
+    - 예산과목 맵핑관리
+        
+        <aside>
+        💡 SELECT *
+        FROM BDG_SBJ_MAP;
+        
+        </aside>
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b649a81d-e6f7-4820-ae5b-725a56537913/Untitled.png)
+        
+        > SBJ_DIV : 예산매핑에서 과목구분 ( 공통코드 S14 )
+        → 세부사업 / 세입예산 / 세출예산
+        PREY_SBJ : 전년도사업코드
+        THY_SBJ : 현재년도사업코드
+        > 
+        
+        - 세부사업 선택시 사업코드도 가져오는 JSP로직
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bbdb15b1-cbe8-4f5f-887b-4ec14b2fe430/Untitled.png)
+            
+            ⇒cellName에 따라 callBack함수만 다르게 지정하고 PopUp을 호출하면 된다.
+            
+            이때 부여되는 cd : S126은 공통코드/ 기본환경설정코드도 아닌 팝업 자체 DAO에 지정해주는 코드이다.  ⇒ 팝업창 commonPopUp.jsp → PopupDAO로 던지는.
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6fd9d561-00d6-4c02-a9b5-21cec8e8427f/Untitled.png)
+            
+            ⇒ 사업코드 팝업은 S126인데 ( `PopupSql.executeCommonPopupQueryS126` )
+            
+            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8f508eb9-cb3a-49d6-9752-f00f4e90d8f8/Untitled.png)
+            
+            ⇒ 다음과 같이 팝업은 하나인데 그 안에 던지는 콜백함수와 같이 던지는 PARAM을 CD로 구분을 두어서 각각 다른 XML을 호출하게 한다. 
+            
+            **따라서 맵핑관리쪽 테이블에 꽂히는 사업코드/사업코드명들은 해당ACC_YY(전년이든 올해든 간에)에 해당하는 `BDG_DTL_BIZ` 에서 가져오는 값들이다.**
+            
+    - 예산편성 마감관리(요구등록)
+        
+        > 예산을 편성하기 위한 차수 및 요구마감일을 등록하는 화면. 예산편성 차수에 따라 요구마감일까지 예산요구(세입․세출) 등록이 가능합니다.
+        
+        이때 예산편성마감관리페이지는 신규를 누르면 요구등록 상태로 올라가고, 예산확정처리쪽과 같은 테이블을 보기때문에 확정까지 처리난애들도 그대로 조회에 뜬다. 
+        또한 예산 확정처리까지 가려면 그전에 세입예산 요구와 마감을해야 한다. 했으면 이후에 예산확정처리쪽에서 예산확정처리를 눌러주면 된다.
+        > 
+        
+        <aside>
+        💡 SELECT *
+        FROM `BDG_BDGDGR` ⇒ 예산확정테이블
+        
+        </aside>
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/62884283-b31c-4924-80fd-dff814b58d6a/Untitled.png)
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8bb6260d-5b10-47ef-88df-975b5ae6fa25/Untitled.png)
+        
+        ⇒ 예산편성마감관리와, 예산확정처리는 같은 테이블을 쓴다.(`BDG_BDGDGR`). 하지만 화면 상에서는 편성 구분(화면에 ‘상태’ 표기컬럼)이 Y상태 : 요구등록 )이면 예산편성마감관리쪽 그리드에는 값이 꽂히지만. 예산확정처리 조회그리드에는 Y가 걸러서 꽂힌다.
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1d8bd06e-8609-4c60-8248-77f45ddf57fb/Untitled.png)
+        
+    - 세입예산 요구(요구등록 후 자료 등록하는 곳)
+        
+        > 세입예산을 편성하기 위한 요구 자료를 등록하는 화면. 회계연도, 예산구분, 회계구분에 따라 세입예산과목별로 등록합니다.
+        > 
+        
+        ⇒ 본예산을 편성하는 경우에는 전년도 예산(`BDG_IMP_LYBDG`)을 가져와서 요구등록 가능하다.
+        
+        <aside>
+        💡 SELECT * 
+        FROM `BDG_IBDG_CPL`
+        
+        </aside>
+        
+        - 조회에 필요한 테이블
+            
+            **예산확정테이블**(요구등록일수도 있고 조정,확정일수도있음) `BDG_BDGDGR` 과
+            
+            **세입예산편성테이블** 과
+            
+            **전년도 세입예산 테이블** 필요함 (이때 세입과목은 VW_IMP_SBJ)도 해줘야함.
+            
+    - 예산편성 마감관리(마감)
+        
+        > 세입․세출예산 요구등록을 마감하는 화면. 요구등록마감을 하면 요구내역이 취합되서 세입․ 세출예산 조정 자료에 반영되고 조정 작업이 가능합니다.
+        > 
+        
+    
+- 입력값이 있으면 데이터 파싱 ,없으면 if안탐
+    
+    CmmUtil.checkNull(param.getReqClodd()).equals("")
+    
+    ⇒ checkNull은 들어오는 String매개변수가 null이면 공백으로, 아니면 그냥 문자열 그대로 출력. 그리고 그걸 “”과 equals비교.
+    
+    ```jsx
+    if (!CmmUtil.checkNull(param.getReqClodd()).equals("")){
+    			param.setReqClodd(param.getReqClodd().replaceAll("-", ""));
+    		}
+    ```
+    
+- SR처리를 하는데 해당 건이 배포가 나가야 하는 건이면?
+    
+    1 ) 해당 기관의 SR을 처리완료로 바꾸고 - ( 어느 날짜 )에 배포 예정입니다. 라고 표시 후 저장
+    
+    2 ) 그리고 SR을 하나 더 내이름으로 파서 기능개선 으로 넣고 단위배포날짜를 넣는다 . 그리고 등록 
+    
+    3 ) 또 이제 배포 등록을 미리 등록해두는데 이때 주의사항으로는 기관넣는 부분에 그 해당기관 + 올샵내부개선 을 2개를 넣어야 한다. 이렇게 안하면 그 기관은 정기배포때 반여잉 된다. 단위배포때는 그 기관에 반영해줘야 하기 때문에 넣어놔야함.
