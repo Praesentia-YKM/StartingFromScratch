@@ -1,0 +1,135 @@
+- lombok은 내가 직접 짤 소스코드를 대신 해주는 친구
+    - 내가 직접 짜지 않고 코딩 되어있는걸 가져다 쓰는 것
+- ContextConfiguration 이 부분이 아주 중요하다 이마리야
+- Spring은 크게 3가지 !!!
+- Web : MVC : Presentation
+- Business : Spring framework
+- Persistence : DB : Mybatis
+- Spring은 2teer로 로딩 (2단계)
+    - Web 단 1단계 - (servlet-context.xml) - servlet-container
+    - Business, Persistence 단 1단계 - (root-context.xml) - root-container
+    - 총 2단계
+    - root-context.xml : Spring, DB(Business, Persistence) 관련 애들 로딩
+    - servlet-context.xml : MVC(Web) 관련 애들 로딩
+- component-scan
+    - 아래 어노테이션이 붙은 애들을 찾아서 Spring이 관리할 수 있도록 지정 → Spring Container에 적재한다.
+    - @Component, @Controller, @Service, @Repository, @Mapper
+    - root-Container : Spring, DB(Business, Persistence) 영역
+        - @Service, @Repository, @Mapper
+    - servlet-Container :  MVC(Web) 영역
+        - @Controller
+    - 모든 영역
+        - @Component - 위 네가지 애들은 모두 @Component를 상속 받음.
+
+- log level (순위)
+    1. fatal
+    2. error
+    3. warn
+    4. info
+    5. debug
+- <!— Root Logger —>
+    - 이 위에 설정된 경로 외에 것에서 에러 발생했을 경우 에러 단계를 설정하는 부분
+    - 에러 단계를 확인이 필요한 순간 : 트러블 슈팅
+    - 이럴 때 warn 단계로 올려 info, debug 메세지는 안보는 경우도 있음
+        - 왜 ?  : 무조건 고칠 필요까진 없어서.
+- 여기까지 지난 시간 리뷰 !!
+- 63페이지 실행된 다음 주목해야할 부분 3가지 !!
+    1. 객체를 선언만 하고 객체화 (new) 하진 않음 !!
+        1. Spring이 로딩될 때  new하여 객체화(component-scan)하고 @AutoWired로 의존주입(생성자 주입, Setter주입)까지 대신 수행해줌 !!
+        2. 객체를 객체화(new)해서 의존 클래스에 주입을 시켜서 해당 객체를 사용해야 하는데 new 단계를 생략함으로써 소스를 줄이고 Spring Container에 각 객체 별 한 가지 객체만을 생성하여 재사용하기 때문에 Single-ton을 따라감.
+        3. 이것으로 우리가 얻을 수 있는 것 
+            1. 소스 단축 → 시간 단축 : 의존성 자동 주입 → 생성자 주입, Setter 주입
+            2. 객체 단축 → 메모리 단축 : component-scan으로 어노테이션 붙은 애들 Spring Container에 객체화 하여 적재 → Single-ton
+- @RunWith + @Test 하면 테스트 유닛이 생성되고 Run as 를 통해 해당 함수를 테스트 실행시킬 수 있음
+- ContextConfiguration(”url”)
+    - 이건 뭘까용~?
+    - **찾아보기.**
+- 64페이지 자바로 설정하는 부분은 시험에서 제외..
+- 65페이지 onMethod
+    - to jdk 7, from jdk 8 이렇게 두개 나와있는데 jdk 8 로 보면 됨.
+- @Data 많이 사용되는 애
+    - 많이 사용하는 method들이 자동 생성 : toString(), 뭐 등등
+- protected 접근제어자 : 상속받는 애들이 사용할 수 있음.
+- 최석원 교수님이 중요하게 생각하시는 부분
+    - 식별하기가 매우 좋아짐.
+    1. Indentation
+    2. naming Rule
+        1. Camel case : 대소문자 구분하기 때문 : Java 에서 사용
+            - 클래스명 : Chef, Restaurant, SampleHotel
+            - 메소드명 : getChef(), getRestaurant()
+            - 객체&변수명 : chef, restaurant, sampleHotel
+        2. Underbar case : 대소문자 구분하지 않기 때문 : DB 에서 사용
+- **생성자 의존 주입**
+    - SampleHotel class 생성
+    - 생성자 의존 주입 방식은 멤버변수에 @AutoWired만 적어주면 끗-
+    - HotelTests Test class 생성
+    - alt+shift+s+r : getter / setter 단축키
+    - alt+shift+s꾹 : toString() 단축키
+        - @ToString() / toString() :
+        - 기본 toString()은 객체의 주소값(ab@sg13sf)이 나옴 근데 우리는 객체 값을 알고 싶으니 Override 하는 것.
+        
+        ```java
+        @Override
+        	public String toString() {
+        		return "SampleHotel [chef=" + chef + "]";
+        	}
+        ```
+        
+- 1개의 객체가 하나의 의존 주입만 할 수 있지 않고 여러 객체를 의존 주입 받을 수 있다.
+    - EX) Car class가 있으면 바퀴 객체, 문 객체, 핸들 객체를 사용해야 하기 때문에 의존 주입 받아야한다.
+- Setter 주입 해야하는 경우
+    
+    ```java
+    	private Restaurant restaurant;
+    	private Chef chef;
+    	@Autowired
+    	public void setRestaurant(Restaurant restaurant) {
+    		this.restaurant = restaurant;
+    	}
+    	@Autowired
+    	public void setChef(Chef chef) {
+    		this.chef = chef;
+    	}
+    ```
+    
+- 생성자 주입 해야하는 경우
+    
+    ```java
+    	// 교수님 선호 방식
+    	@Autowired
+    	private Chef chef;
+    	@Autowired
+    	private Restaurant restaurant;
+    ```
+    
+    ```java
+    	// 변수에 @AutoWired 안쓰는 방법
+    	@AllArgsConstructor
+    	public class SampleHotel {
+    		private Chef chef;
+    		private Restaurant restaurant;
+    	}
+    ```
+    
+    ```java
+    	private Restaurant restaurant;
+    	private Chef chef;
+    
+    	public SampleHotel(Restaurant restaurant, Chef chef) {
+    		this.restaurant = restaurant;
+    		this.chef = chef;
+    	}
+    ```
+    
+- 본인이 편한대로 하는 것이 맞지만, 한 가지 방법을 골랐으면 전부 그 방식으로 통일해줘야 함.
+- 다음 시간 Spring + Oracle 연동
+
+- 시험 2번 다 프로그램 제출
+- 중간고사 변별력 X
+    - 이유는 중간고사 지나고 포기할 까봐
+- 기말고사는 어려울 수 있음.
+- 웹 심화 Spring : 1년과정
+- A : 30%
+- A ~ B : 100% 까지 가능 !!! ㅋㅋㅋ
+- 시험 때 다 틀려도 Indentation, naming rule 만 지키면 점수 나올 것 !!!
+- Open book, Open Internet
