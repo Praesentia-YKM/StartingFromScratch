@@ -164,3 +164,26 @@
 > 
 > 때문에 자식인 ArrayList, vector등으로 객체를 생성한다.
 >
+
+
+- 브라우저 캐시관리(script파일 관련)
+    
+    > 서버재시작, 인텔리제이 source update이런건 클래스파일과 관련있는거지, sript나 jsp파일이랑은 관련이 없다. 순전히 앞딴 문제는 브라우저가 관리하는데 브라우저의 캐시를 날려보고 다시 한다던가 하면 된다.
+    > 
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b3bda504-cd50-4402-9e9c-47da7bc82428/Untitled.png)
+    
+    ⇒ 해당 경로의 파일 
+    
+- GROUP BY
+    
+    <aside>
+    💡 SELECT 한 컬럼과 GROUP BY한 컬럼을 맞춰줘야한다. ( NULL값 제외)
+    
+    </aside>
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9fc0e085-ad98-4bfa-9c91-052df1d88a33/Untitled.png)
+    
+- UNION 주의사항
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ab1f830b-cb2d-4997-9954-6d5b169d6078/Untitled.png)
