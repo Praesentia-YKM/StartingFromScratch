@@ -133,3 +133,34 @@
 - A ~ B : 100% 까지 가능 !!! ㅋㅋㅋ
 - 시험 때 다 틀려도 Indentation, naming rule 만 지키면 점수 나올 것 !!!
 - Open book, Open Internet
+
+
+
+
+> ##  **맵 사용법 ##**
+> 
+> 
+> map선언시
+> 
+> **Map<String, String> map= new HashMap<>();**
+> 
+> 이렇게 하는데 앞의 Map과 뒤의 HashMap의 글자가 다른 이유는 Map이 인터 페이스이기 때문이다.
+> 
+> 인터페이스는 선언만 가능하다. 객체 생성이 불가능한 것들이다.
+> 
+> 때문에 자식인 HashMap으로 객체를 생성한다.
+> 
+> HashMap은 본인의 메소드 외에 부모인Map의 메소드들을 강제 상속받는다.
+> 
+> **HashMap<String, Object> map2= new HashMap<>();**
+> 
+> 이렇게 선언도 가능하다.
+> 
+> List도 같은 맥락
+> 
+> List를 왜 ArrayList로 객체 생성하는지 몰랐는데 Map과 같은 이유였다.
+> 
+> List는 인터페이스 부모니까, 바디 생성이 불가능하다.
+> 
+> 때문에 자식인 ArrayList, vector등으로 객체를 생성한다.
+>
