@@ -223,3 +223,25 @@
     > 
     
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9968eb9b-c63b-42b1-b530-291ccf8dd1c3/Untitled.png)
+    
+    ## **❗️객체를 위한 for문 사용법**
+
+**배열과 객체, 반복문을 응용하여 대량의 정보를 다룰 수 있다.객체에서 사용하는 반복문은 for in
+    ◦ `for( let key in obj )`
+    ◦ `for in`문은 객체안에 모든 키를 찾아 ‘key’라는 변수에 할당한다.배열에서 사용하는 반복문은 for of
+    ◦ `for( let el of arr )`
+    ◦ `for of` 문은 배열의 ‘index’ 만큼 반복하여 엘리먼트를 ‘el’라는 변수에 할당한다.**
+
+---
+
+## **⚡️ 객체(Object)의 메소드(Method)**
+
+### **❗️Object.keys(obj)**
+
+**객체(object)의 속성(property)의 이름(key)을 배열(array)로 반환(return)한다.**
+
+[Object.keys() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys)
+
+### **❗️Object.values(obj)**
+
+**객체(object)의 속성(property)의 값(values)을 배열(array)로 반환(return)한다.**
