@@ -187,3 +187,39 @@
 - UNION 주의사항
     
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ab1f830b-cb2d-4997-9954-6d5b169d6078/Untitled.png)
+    
+    - 웹서버와 was구동순서
+    
+    . 보통 아파치(웹서버)와 톰캣을 예로들어 **웹서버와 WAS 연동 시 동작되는 방식**은 다음과 같다.
+    
+    1. 서비스를 사용하는 유저가 브라우저를 통해 아파치 웹서버에 요청
+    
+    2. 아파치 웹서버는 이 요청이 톰캣에서 처리해야하는 요청인지 확인
+    
+    3. 톰캣에서 처리해야하는 경우 톰캣의 AJP포트에 접속하여 요청건 전달
+    
+    4. 톰캣은 웹서버로부터 요청을 전달받아 처리 후 다시 웹서버에 전달
+    
+    5. 아파치 웹서버는 결과값을 사용자에게 전달
+    
+- 컴파일시 변화 , xml 수정시 서버 재기동 필요없게하기
+    
+    > java파일은 complie을 통해 class파일이 만들어지고 이를 jvm이 해석하여 어플리케이션이 실행된다.
+    > 
+    
+    > mybatis 환경 설정을 통해 xml 파일들을 parsing하여 이 정보를 가지고 있는 bean을 통해서 해당 쿼리가 실행된다. **이 bean은 어플리케이션 실행시에 bean이 생성되며 Sql 쿼리 문을 저장**해 놓는다.(여기서 말하는 bean은 SqlSessionFactory이다. DB Connection, Transaction, Sql 정보등을 가지고 있다.)
+    > 
+    > 
+    > 따라서 이 bean의 Sql 정보를 변경해주지 않는 이상, xml 파일을 변경하더라도 반영되지 않는 것이다.
+    > 
+    > 그렇다면 어떻게 변경되는지 알아보기 위해서, 먼저 어떻게 초기화 되는지를 알아야한다.
+    > 
+    > SqlSessionFactory가 bean으로 등록되는 과정중에 afterPropertiesSet메서드가 호출되면서 buildSqlSessionFactory(); 메서드가 호출된다. 이 과정에서 Sql 관련, Connection 관련 정보들이 세팅된다.
+    > 
+    > ⇒ 이렇게 구동이 되는게 기본인데 이걸 이제 동적으로 되게 하면 된다.
+    > 
+    > .xml 변경 이후에 afterPropertiesSet 메서드를 호출하여 xml을 다시 읽고 sqlSessionFactocy에 할당을 해주면서 동적으로 xml을 반영하도록한다. 즉, 
+    > mybatis가 사용하는 sqlSessionFactoryBean이 가지고있는 sqlSource를 변경해준다
+    > 
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9968eb9b-c63b-42b1-b530-291ccf8dd1c3/Untitled.png)
