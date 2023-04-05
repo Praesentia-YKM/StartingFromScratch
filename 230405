@@ -803,6 +803,194 @@ public class MyBatisController {
 }
 
 
+# 5주차(공부필요)
 
+lib안에 jar파일 넣고  → jdbc연결(스프링에서)
 
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/81dcff38-f42c-4fee-bee2-c9d17e8b0fea/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/192a82ae-d63f-409a-a153-b903597d6625/Untitled.png)
+
+개발자 SQL Server 2022 Developer는 **비프로덕션 환경에서 개발 및 테스트 데이터베이스로 사용하도록 라이선스가 제공되며 모든 기능을 갖춘 무료 버전**입니다.
+
+- SQL Injection이란? (재밌음 보셈)
+    
+    [SQL Injection 이란? (SQL 삽입 공격)](https://noirstar.tistory.com/264)
+    
+- 스프링 세션관리 & connection pool 이란? [ 개념 찾기]
+    
+    was속 jdbc와 db연결 시 세션 관리
+    
+    → connection pool로 해결
+    
+    - statement란? sql해석순서?
+        
+        # Statement
+        
+        자바에서 쿼리문을 사용할 때 java.sql 패키지에 있는 Statement를 사용한다. Statement는 SQL문을 실행할 때 사용하는 인터페이스이다.
+        
+        Statement는 다음과 같은 동작 방식을 가진다.
+        
+        ![https://blog.kakaocdn.net/dn/Lru6s/btrBaxI0EO5/ZaTQ34QiXXI9KuP2ikxxb0/img.png](https://blog.kakaocdn.net/dn/Lru6s/btrBaxI0EO5/ZaTQ34QiXXI9KuP2ikxxb0/img.png)
+        
+        # PreparedStatement
+        
+        PreparedStatement는 Statement를 상속하고 있는 Interface이다.
+        
+        ![https://blog.kakaocdn.net/dn/JY0e6/btrBakJSrh6/FMgsC34gocvskQPKBGMRV0/img.png](https://blog.kakaocdn.net/dn/JY0e6/btrBakJSrh6/FMgsC34gocvskQPKBGMRV0/img.png)
+        
+        PreparedStatement는 내부적으로 Statement의 4단계 과정 중 첫 번째 parse 과정의 결과를 캐싱하고, 나머지 3가지 단계만 거쳐서 SQL문이 실행될 수 있게 한다.
+        
+        PreparedState를 사용하면 구문 분석(parse)의 결과를 캐싱해서 과정을 생략할 수 있으므로 성능이 향상된다.
+        
+        많은 분들이 아시고 계시길 PreparedStatement가 SQL Injection을 방어할 수 있다고 한다.
+        
+        ```jsx
+        로그인 기능을 제공한다고 가정하자.
+        
+        Statement를 사용하면 아래와 같은 문법으로 작성하게 된다.
+        String sql = "SELECT * FROM user WHERE id ="+id+" AND password="+password;
+        
+        사용자가 id에 1을 입력했다면 sql은 "SELECT * FROM user WHERE id=1 AND password="+password 가 된다.
+        
+        사용자가 id에 1이 아닌 "1 OR 1=1 --"을 입력했다고 가정하자. password에는 1을 입력했다고 가정하자.
+        
+        그러면 SQL문은 다음과 같이 된다.
+        SELECT * FROM user WHERE id=1 OR 1=1 -- AND password=1;
+        
+        여기서 --은 주석이기 때문에 password 검증은 사라지고 모든 유저 정보가 전부 나온다.
+        ```
+        
+        Statement는 이러한 문제점 때문에 SQL Injection에 취약하다.
+        
+        반면 PreparedStatement의 경우 `SELECT * FROM user WHERE id = ? AND password = ?;` 형식으로 작성한다.
+        
+        여기서 구문 분석을 캐싱하는 과정에서 ?를 필드값으로 알고 하나의 필드값으로 삽입해버린다.
+        
+        즉, 사용자가 id에 "1 OR 1=1 --"을 삽입해도 지금까지 id 뒤에 오는 값은 하나의 필드값으로 분석했으므로 "1 OR 1=1 --"이 id를 비교하는 하나의 필드값으로 인식을 해버린다.
+        
+        결과적으로 구문이 바뀌지 않고, id가 "1 OR 1=1 --"인 것이 없으므로 결과가 조회되지 않는다.
+        
+        # 마무리
+        
+        Prepared Statement를 사용할 수 없겠다고 생각이 드는 상황도 있다.
+        
+        본인의 경우 초성 검색을 개발할 때 SQL문이 복잡해서 어쩔 수 없이 Statement를 사용했었다.
+        
+        물론 그 경우는 테이블이 보안적으로 노출되어도 전혀 문제가 없는 테이블이라서 가능했었고, 요즘은 가능하면 ORM이나 Prepared Statement를 사용해서 풀어내는 것이 좋다고 본다.
+        
+    - [ ]  캐싱한다?
+        - 캐슁이란 **저장한다는 뜻**
+        컴퓨팅에서 캐슁이란 오랜시간이 걸리는 작업의 결과를 저장해서 시간과 비용을 필요로 회피하는 기법을 의미한다.
+    - [ ]  Connection pool
+        
+        ##**커넥션 풀(DBCP) 특징##**
+        
+        - 웹 컨테이너(WAS)가 실행되면서 connection 객체를 미리 pool에 생성해 둡니다.
+        - HTTP 요청에 따라 pool에서 connection객체를 가져다 쓰고 반환한다.
+        - 이와 같은 방식으로 물리적인 데이터베이스 connection(연결) 부하를 줄이고 연결 관리 한다.
+        - pool에 미리 connection이 생성되어 있기 때문에 connection을 생성하는 데 드는 요정 마다 연결 시간이 소비되지 않는다.
+        - 커넥션을 계속해서 재사용하기 때문에 생성되는 커넥션 수를 제한적으로 설정함
+        
+        [[Spring] 커넥션 풀(Connection pool)이란?](https://linked2ev.github.io/spring/2019/08/14/Spring-3-커넥션-풀이란/)
+        
+    - [ ]  원래는 jdbc driver를 통해 dataSource클래스에 경로를 넣어서 설정하는데 이걸 (아래사진과 같은 번거로움을) HikariCP를 통해 해결
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/931499d7-4bca-4765-a186-c923087f67b6/Untitled.png)
+        
+        - HikariCp
+            
+            리고 Java에서는 커넥션풀을 사용할때 javax.sql.DataSource 라는 인터페이스를 사용한다. DataSource 인터페이스를 사용하여 커넥션 풀을 사용할 때 사용할수 있는 여러 커넥션풀 중에서 spring-jdbc 라이브러리를 사용하는 방법도 있지만 최근 HikariCP ([https://github.com/brettwooldridge/HikariCP](https://github.com/brettwooldridge/HikariCP)
+            ) 라는 커넥션풀이 유행한다는 정보를 알게되었다.
+            
+
+- ctrl shift r   ( 이클립스 파일검색)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7b058e2a-ae06-458c-8344-90bc3cba68e5/Untitled.png)
+
+## orcl 과 xe 차이가 뭘까 오라클 접속할떄
+
+## com.zaxxer.hikari.HikariConfig이게뭘까?
+
+## Log4j 란?
+
+[스프링의 특징과 의존성 주입2-4](https://tjsdudkim.tistory.com/104)
+
+[2. 스프링의 특징과 의존성 주입](https://sangwon-story.tistory.com/4)
+
+- mybatis maven repository 추가
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/56586f38-a4ac-4a56-9ff3-649cb566c026/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3b58b300-e49d-4a37-a2d1-5269c7fec609/Untitled.png)
+    
+- mybatis -spring 도 추가
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/50163da9-6ae7-49f6-b6cb-907d227cc072/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4178a408-f974-426c-8ed4-8fbd3b1e96cb/Untitled.png)
+    
+    <!-- [https://mvnrepository.com/artifact/org.mybatis/mybatis-spring](https://mvnrepository.com/artifact/org.mybatis/mybatis-spring) -->
+    <dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis-spring</artifactId>
+    <version>2.0.7</version>
+    </dependency>
+    
+- spring-tx도 추가 ( 우리 스프링이랑 버전을 맞춰야함 pom.xml에 있는 ${org.springframework-version}의 데이터인 5.0.7버전
+    
+    tx = 트랜잭션을 관리하는 부분
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/12df622a-05cd-4ef1-9145-599b1dc2d188/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a1d31afc-e5c4-495b-a81b-cac1d8d6bf3a/Untitled.png)
+    
+- spring-jdbc도 추가
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/126f6692-96da-470c-9f55-2a850cfa4367/Untitled.png)
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/95c53efd-64cc-4861-86a3-0e5b20e74a3b/Untitled.png)
+    
+    ```java
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+    		<dependency>
+    		    <groupId>org.springframework</groupId>
+    		    <artifactId>spring-jdbc</artifactId>
+    		    <version>${org.springframework-version}</version>
+    		</dependency>
+    ```
+    
+
+# myBatis는  sqlSessionFactory사용한다.(root-context에 추가)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7e2036e6-c751-4921-a66a-d3e9ad33b11c/Untitled.png)
+
+// property속성에 name주는건 함부로 바꿀 수 없다.
+
+// bean 의 id는 내가 설정할 수 있는데 그걸 참조할때 기억해야한다, 
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f866e4c4-2c92-428b-bb1d-6bfe8971629f/Untitled.png)
+
+name= “dataSource” 는 데이터소스 속성 가져온거
+
+ref=”dataSource”는 내가 만든 dataSource객체 이름 (내가 객체를 dataSource로 생성했음)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6d3fd09b-65a6-4625-8e03-8da51a6bfb20/Untitled.png)
+
+## TEST시!!
+
+- 이거 확인 ㄱㄱ
+    
+    @RunWith(SpringJUnit4ClassRunner.class)
+    @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
+    @Log4j
+    
+    의 정체 파악하기
+    
+
+## SELECT실행 하는 방법 로직
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7f4218bb-9cc5-4f14-a597-50be2b7c15ad/Untitled.png)
+
+→ 생각해보기
 
