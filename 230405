@@ -1,0 +1,808 @@
+MyBatis
+
+
+
+- SQL과 자바 객체를 매핑하기 위해 개발된 DB 접근용 프레임워크
+
+- Hibernate, JPA : DB의 record와 객체를 매핑(ORM)
+
+- MyBatis : SQL과 객체를 매핑(SQLMapper)
+
+
+
+장점
+
+
+
+1. SQL 체계적 관리, 선언적 정의
+
+- 설정 파일, 어노테이션에 선언적 정의를 하기 때문에 비즈니스 로직에서 SQL을 감출 수 있음
+
+- Mapper interface가 SQL을 감추는 역할
+
+- Mapper interface를 호출하여 연결된 SQL 실행
+
+
+
+2. 자바 객체와 SQL 입출력 값의 투명한 바인딩
+
+
+
+3. 동적 SQL 조합
+
+
+
+Component
+
+
+
+- Config : MyBatis 동작 설정을 지정하는 XML 파일
+
+- Mapper 인터페이스 : 매핑 파일, 어노테이션에 정의한 SQL에 대응하는 자바 인터페이스
+
+- Mapping 파일 : SQL과 객체의 매핑 정의를 하는 XML 파일
+
+- SqlSession : SQL 발행, 트랜잭션 제어용 API 제공
+
+- SqlSessionFactory : SqlSession 생성을 위한 component
+
+- SqlSessionFactoryBuilder : MyBatis 설정 파일을 읽어 SqlSessionFactory를 생성하기 위한 컴포넌트
+
+
+
+
+
+Spring MyBatis
+
+
+
+Component
+
+
+
+- SqlSessionFactoryBean : SqlSessionFactory를 생성하고 DI container에 객체를 저장하기 위한 component
+
+- SqlSessionTemplate : Spring transaction 관리하에 SqlSession을 취급하기 위한 component
+
+
+- MapperFactoryBean : Spring transaction 관리하에 SQL을 실행하는 Mapper 객체를 빈으로 생성하기 위한 component
+
+
+
+1. 빈 생성 처
+
+
+- SqlSessionFactoryBean이 SqlSessionFactoryBuilder를 사용하여 SqlSessionFactory 생성
+
+- MapperFactoryBean은 SqlSessionTemplate 생성
+
+
+
+2. 데이터 접근 처리
+
+
+- Request를 받으면 Mapper 객체의 메소드를 호출
+
+- Mapper 객체는 SQlSession의 구현 클래스 SqlSessionTemplate의 메소드 호출
+
+- SqlSessionTemplate은 SqlSessionFactory를 통해 SqlSession을 취득하고 SqlSession을 트랜잭션에 할당하여 제어
+
+
+
+Config
+
+
+
+1. dependency 추가
+
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis</artifactId>
+    <version>3.4.5</version>
+</dependency>
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis-spring</artifactId>                    
+    <version>1.3.1</version>
+</dependency>
+cs
+- mybatis, mybatis-spring 추가
+
+
+
+2. MyBatis Config
+
+
+@Configuration
+@EnableTransactionManagement
+@MapperScan("com.mapper")
+public class MyBatisConfig {
+ 
+    @Bean
+    public DataSource dataSource() {
+        return new EmbeddedDatabaseBuilder()
+                .setType(EmbeddedDatabaseType.H2)
+                .setScriptEncoding("UTF-8").addScript("test.sql").build();
+    }
+ 
+    @Bean
+    public SqlSessionFactory sqlSessionFactory() throws Exception {
+        SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
+        sessionFactoryBean.setDataSource(dataSource());
+        sessionFactoryBean.setConfigurationProperties(myBatisProperties());
+        return sessionFactoryBean.getObject();
+    }
+    private Properties myBatisProperties() {
+        Properties properties = new Properties();
+        properties.put("lazyLoadingEnabled", "true");
+        properties.put("jdbcTypeForNull", "NULL");
+        return properties;
+    }
+ 
+    @Bean
+    public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
+        return new SqlSessionTemplate(sqlSessionFactory);
+    }
+ 
+    @Bean
+    public PlatformTransactionManager platformTransactionManager(){
+        return new DataSourceTransactionManager(dataSource());
+    }
+}
+Colored by Color Scripter
+cs
+- @MapperScan : Mapper가 위치한 package 경로 지정
+
+- DataSource Bean 등록
+
+- DataSource에서 자동으로 table을 생성하도록 sql 파일등록
+
+- SqlSessionFactory Bean 등록(SqlSessionFactoryBean을 이용해 설정 값들을 지정하고 SqlSessionFactory 생성
+
+- Properties로 lazy loading을 global로 설정
+
+- 생성한 SqlSessionFactory로 SqlSessionTemplate 생성
+
+
+
+
+
+MyBatis 사용
+
+
+
+MyBatis CRUD
+
+
+
+1. Model
+
+
+public class User {
+    private String id;
+ 
+    private String name;
+ 
+    public User() {
+    }
+ 
+    public String getId() {
+        return id;
+    }
+ 
+    public void setId(String id) {
+        this.id = id;
+    }
+ 
+    public String getName() {
+        return name;
+    }
+ 
+    public void setName(String name) {                        
+        this.name = name;
+    }
+}
+Colored by Color Scripter
+cs
+
+
+
+2. Mapper 인터페이스 작성
+
+//@Mapper
+@Repository
+public interface UserMapper {
+    void createUser(User user);
+ 
+    User getUserOne(String id);
+ 
+    List<User> getUserAll();
+ 
+    void updateUser(User user);                               
+ 
+    void removeUser(String id);
+}
+cs
+- @Mapper나 @Repository 사용하여 bean 등록
+
+- @Mapper의 경우, 컴파일 시점에 bean 등록이 되어있지 않아 IDE에서 에러 표시날 수 있음
+
+
+
+3. Create(POST)
+
+1) Mapping file 이용
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.mapper.UserMapper">
+    <insert id="createUser" parameterType="com.model.User">
+    INSERT INTO user(id, name) VALUES (#{id}, #{name})
+    </insert> 
+</mapper>
+Colored by Color Scripter
+cs
+- id에 mapper에 있는 method명을 삽입
+
+- query문 작성
+
+- parameterType으로 model인 User를 넘겨줌
+
+
+
+2) Annotation 이용
+
+@Repository
+public interface UserMapper {
+    @Insert("INSERT INTO user(id, name) VALUES(#{id}, #{name})")          
+    void createUser(User user);
+}
+Colored by Color Scripter
+cs
+- @Insert annotation안에 query문 작성
+
+
+
+3) Controller
+
+@RestController
+@RequestMapping(value = "/mybatis")
+public class MyBatisController {
+    @Autowired
+    private UserMapper userMapper;
+ 
+    @RequestMapping(value = "/", method = RequestMethod.POST)            
+    public void createUser(@RequestBody User user) {
+        userMapper.createUser(user);
+    }
+}
+Colored by Color Scripter
+cs
+
+
+4) 결과
+
+- 성공
+
+
+4. Read(GET)
+
+1) Mapping file 이용
+
+<mapper namespace="com.mapper.UserMapper">
+    <select id="getUserOne" resultType="com.model.User" parameterType="String">
+        SELECT * FROM user WHERE id=#{id}
+    </select>
+    <select id="getUserAll" resultType="java.util.HashMap">
+        SELECT * FROM user
+    </select>
+</mapper>
+Colored by Color Scripter
+cs
+- 1개의 User를 가져오는 query문과 전체를 가져오는 query문 작성
+
+- resultType으로 User와 List 지정
+
+- getUserOne의 경우 parameter로 id를 받기 위해 parameterType을 String으로 지정
+
+
+
+2) Annotation 이용
+
+@Repository
+public interface UserMapper {
+    @Select("SELECT * FROM user WHERE id = #{id}")                       
+    User getUserOne(String id);
+ 
+    @Select("SELECT * FROM user")
+    List<User> getUserAll();
+}
+Colored by Color Scripter
+cs
+- @Select annotation안에 query문 작성
+
+
+
+3) Controller
+
+@RestController
+@RequestMapping(value = "/mybatis")
+public class MyBatisController {
+    @Autowired
+    private UserMapper userMapper;
+ 
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)        
+    public User getUserOne(@PathVariable String id) {
+        return userMapper.getUserOne(id);
+    }
+ 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public List<User> getUserAll() {
+        return userMapper.getUserAll();
+    }
+}
+Colored by Color Scripter
+cs
+
+
+4) 결과
+
+- getOne
+
+
+- getAll(mapping) -> 대문자(resultType이 HashMap이기 때문)
+
+
+- getAll(annotation) -> 소문자
+
+
+
+
+5. Update(PUT)
+
+1) Mapping file 이용
+
+<mapper namespace="com.mapper.UserMapper">
+    <update id="updateUser" parameterType="com.model.User">        
+        UPDATE user SET name=#{name} WHERE id=#{id}
+    </update>
+</mapper>
+Colored by Color Scripter
+cs
+- Update query문 작성
+
+- parameterType을 model인 User로 지정
+
+
+
+2) Annotation 이용
+
+@Repository
+public interface UserMapper {
+    @Update("UPDATE user SET name=#{name} WHERE id=#{id}")         
+    void updateUser(User user);
+}
+Colored by Color Scripter
+cs
+- @Update annotation안에 query문 작성
+
+
+
+3) Controller
+
+@RestController
+@RequestMapping(value = "/mybatis")
+public class MyBatisController {
+    @Autowired
+    private UserMapper userMapper;
+ 
+    @RequestMapping(value = "/", method = RequestMethod.PUT)      
+    public void updateUser(@RequestBody User user) {
+        userMapper.updateUser(user);
+    }
+}
+Colored by Color Scripter
+cs
+4) 결과
+
+- update
+
+7
+
+- update 후 get
+
+8
+
+
+
+6. Delete(DELETE)
+
+1) Mapping file 이용
+<mapper namespace="com.mapper.UserMapper">
+    <delete id="removeUser" parameterType="String">                 
+        DELETE FROM user WHERE id=#{id}
+    </delete>
+</mapper>
+Colored by Color Scripter
+cs
+- Delete query문 작성
+
+- parameterType을 String으로 지정
+
+
+
+2) Annotation 이용
+
+1
+2
+3
+4
+5
+@Repository
+public interface UserMapper {
+    @Delete("DELETE FROM user WHERE id=#{id}")                      
+    void removeUser(String id);
+}
+Colored by Color Scripter
+cs
+- @Delete annotation안에 query문 작성
+
+
+
+3) Controller
+
+@RestController
+@RequestMapping(value = "/mybatis")
+public class MyBatisController {
+    @Autowired
+    private UserMapper userMapper;
+ 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void removeUser(@PathVariable String id) {
+        userMapper.removeUser(id);
+    }
+}
+Colored by Color Scripter
+cs
+
+
+4) 결과
+
+- delete
+
+
+
+- delete 후 get
+
+
+
+7. Controller(전체)
+
+@RestController
+@RequestMapping(value = "/mybatis")
+public class MyBatisController {
+    @Autowired
+    private UserMapper userMapper;
+ 
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public User getUserOne(@PathVariable String id) {
+        return userMapper.getUserOne(id);
+    }
+ 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public List<User> getUserAll() {
+        return userMapper.getUserAll();
+    }
+ 
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public void createUser(@RequestBody User user) {
+        userMapper.createUser(user);
+    }
+ 
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    public void updateUser(@RequestBody User user) {
+        userMapper.updateUser(user.getId(), user.getName());
+    }
+ 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void removeUser(@PathVariable String id) {
+        userMapper.removeUser(id);
+    }
+}
+Colored by Color Scripter
+cs
+
+
+8. Mapping file(전체)
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.mapper.UserMapper">
+    <select id="getUserOne" resultType="com.model.User" parameterType="String">
+        SELECT * FROM user WHERE id=#{id}
+    </select>
+    <select id="getUserAll" resultType="java.util.HashMap">
+        SELECT * FROM user
+    </select>
+    <insert id="createUser" parameterType="com.model.User">
+        INSERT INTO user(id, name) VALUES (#{id}, #{name})
+    </insert>
+    <update id="updateUser">
+        UPDATE user SET name=#{name} WHERE id=#{id}
+    </update>
+    <delete id="removeUser" parameterType="String">
+        DELETE FROM user WHERE id=#{id}
+    </delete>
+</mapper>
+Colored by Color Scripter
+cs
+
+
+9. Mapper Interface(전체)
+
+1) Mapping file 이용
+
+@Repository
+public interface UserMapper {
+ 
+    void createUser(User user);
+ 
+    User getUserOne(String id);
+ 
+    List<User> getUserAll();
+ 
+    void updateUser(@Param("id") String id, @Param("name") String name);
+ 
+    void removeUser(String id);
+}
+Colored by Color Scripter
+cs
+
+
+2) Annotation
+
+@Repository
+public interface UserMapper {
+ 
+    @Insert("INSERT INTO user(id, name) VALUES(#{id}, #{name})")       
+    void createUser(User user);
+ 
+    @Select("SELECT * FROM user WHERE id = #{id}")
+    User getUserOne(String id);
+ 
+    @Select("SELECT * FROM user")
+    List<User> getUserAll();
+ 
+    @Update("UPDATE user SET name=#{name} WHERE id=#{id}")
+    void updateUser(User user);
+ 
+    @Delete("DELETE FROM user WHERE id=#{id}")
+    void removeUser(String id);
+}
+ 
+Colored by Color Scripter
+cs
+
+
+추가 기능
+
+
+
+1. @Param
+
+- Parameter가 여러 개인 경우 사용
+
+
+@Repository
+public interface UserMapper {  
+    void test(@Param("id") String id, @Param("name") String name);
+}
+Colored by Color Scripter
+cs
+- @Param으로 지정하여 query문에서 사용
+
+
+
+2. ResultMap(@Result)
+
+- Query 결과의 Result set과 Java 객체를 명시적으로 mapping
+
+1) Mapping file
+<mapper namespace="com.mapper.UserMapper">
+    <resultMap id="userResult" type="com.model.User">
+        <id column="id" property="id"/>
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+    <select id="getUserOne" resultMap="userResult" parameterType="String">
+        SELECT * FROM user WHERE id=#{id}
+    </select>
+</mapper>
+Colored by Color Scripter
+cs
+- resultMap으로 사용할 id와 model type을 지정
+
+- parameter로 넣을 값을 id로 지정
+
+- result로 받을 값을 result로 지정
+
+
+
+2) Annotation
+
+
+@Repository
+public interface UserMapper {
+    @Results({
+            @Result(column = "id", property = "id", id = true),       
+            @Result(column = "name", property = "name")
+    })
+    @Select("SELECT * FROM user WHERE id = #{id}")
+    User getUserOne(String id);
+}
+Colored by Color Scripter
+cs
+- @Results안에 받을 값들을 @Result로 명시
+
+- column과 받을 property를 명시
+
+
+
+3. Key 취득 기능
+
+- 기본키에 설정하는 값을 가져오는 처리를 비즈니스 로직에서 분리할 수 있음
+
+1) Mapping file
+
+<mapper namespace="com.mapper.UserMapper">
+    <insert id="test" parameterType="com.model.User">
+        <selectKey keyProperty="id" order="BEFORE" resultType="String">
+            SELECT RANDOM_UUID()
+        </selectKey>
+        INSERT INTO user(id, name) VALUES (#{id}, #{name})
+    </insert>
+</mapper>
+Colored by Color Scripter
+cs
+- selectKey를 사용하여 Random한 값을 생성하여 id에 할당
+
+
+
+2) Annotation
+
+@Repository
+public interface UserMapper {
+    @SelectKey(statement = "SELECT RANDOM_UUID()", keyProperty = "id",
+                before = true, resultType = String.class)
+    @Insert("INSERT INTO user(id, name) VALUES(#{id}, #{name})")
+    void test(User user);
+}
+Colored by Color Scripter
+cs
+- @SelectKey annotation으로 지정
+
+
+
+3) 결과
+
+- create
+
+11
+
+- create 후 get
+
+12
+
+
+
+4. 동적 SQL 조립
+
+1) 매핑 파일로 조립
+
+- <where>, <if>, <choose>, <foreach> 등을 사용하여 동적으로 SQL을 조립하여 사용할 수 있음
+
+ex)
+<mapper namespace="com.mapper.UserMapper">
+    <select id="selectTest" resultType="com.model.User" parameterType="com.model.User">
+        SELECT * FROM user
+        <where>
+            <if test="id != null">
+                and id == #{id}
+            </if>
+        </where>
+    </select>
+</mapper>
+Colored by Color Scripter
+cs
+- <where>로 WHERE문을 생성하고 <if>로 값을 비교하여 WHERE문 조건 완성
+
+
+
+2) Annotation으로 조립
+
+@Repository
+public interface UserMapper {
+    @SelectProvider(type = UserSqlBuilder.class, method = "selectSql")   
+    User selectTest(User user);
+ 
+    class UserSqlBuilder{
+        public String selectSql(User user) {
+            return new SQL(){
+                {
+                    SELECT("*");
+                    FROM("user");
+                    if(user.getId() != null) {
+                        WHERE("id LIKE #{id}");
+                    }
+                }
+            }.toString();
+        }
+    }
+}
+Colored by Color Scripter
+cs
+- @SelectProvider를 사용하여 조립(@InsertProvider, @UpdateProvider, @DeleteProvider)
+
+- type에 Sql을 생성할 class를 지정하고 클래스 안의 method명을 지정
+
+- class를 생성하고 동적으로 WHERE문을 생성
+
+
+
+3) 결과
+
+
+
+5. RowBounds
+
+- 검색 범위를 지정하기 위해 사용하는 클래스
+
+- method의 인자에 RowBounds를 넘겨줌
+
+
+@RestController
+@RequestMapping(value = "/mybatis")
+public class MyBatisController {
+    @Autowired
+    private UserMapper userMapper;
+ 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)       
+    public User selectTest(@RequestBody User user) {
+        RowBounds rowBounds = new RowBounds(1,3);
+        return userMapper.selectTest(user, rowBounds);
+    }
+}
+Colored by Color Scripter
+cs
+- RowBounds 객체를 생성하고 인자로 넘겨줌
+
+- RowBounds(offset, limit) -> (1,3) : 1번 offset부터 3개를 가져옴
+
+
+
+6. ResultHandler
+
+- 조회한 결과를 추가적으로 처리하고 싶을 때 사용
+
+- method의 인자에서 ResultHandler<Object>를 받음
+
+@RestController
+@RequestMapping(value = "/mybatis")
+public class MyBatisController {
+    @Autowired
+    private UserMapper userMapper;
+ 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)      
+    public User selectTest(@RequestBody User user) {
+        return userMapper.selectAll(resultContext -> {
+           // implement
+        });
+    }
+}
+
+
+
+
+
