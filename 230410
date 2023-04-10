@@ -1,0 +1,38 @@
+<!--  마이바티스와 스프링사이에 있는 그런부분을 scan을 해라 -->
+<mybatis-spring:scan base-package="kr.ac.seoil.mapper"/>
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1ff5813f-5d78-47cf-9e62-16e0953222b8/Untitled.png)
+
+자바파일과 리소스디렉토리의 차이점
+
+: 자바 → 컴파일이 필요한 파일들이 들어온다 ( src/main/java)
+
+리소스 → 컴파일이 필요없는 파일들이 들어온다(src/main/resource)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ec554c38-f14f-4a0c-83e7-252a0e9074da/Untitled.png)
+
+⇒ 어쩃든 MAPPER도 INTERFACE인데 그럼 구현체 부분은 뭘까? 라고 생각할 수 있지만
+
+이 부분은 마이바티스 상에서 ID로 연결된거라 JAVA MAPPER파일이 이에 해당하는 구현체라고 볼 수 있다. 이건 마이바티스가 설계될때 그렇게 된거
+
+## Log가 찍힐때 한줄로 쭉 찍히는거 킹받을때
+
+→ 사용자가 한 인덴테이션 그대로 로그에 찍히게 하는 기능
+
+→ 파라미터엔 바인딩까지 되게해서 나오게 하는 기능
+
+⇒하지만 무조건 좋진 않다. 이러한 기능을 탑재함으로써 실행속도가 조금 늦어져서 운영서버에는 이 드라이버 파일을 쓰지 않는다. 개발에는 잘 적용되어있다.
+
+## Model1 과 Model2의 차이점 알아보기
+
+→ Model1 : 보안에 취약함, 소스가 유출된다(jsp에 올인원 되어있으면) 즉, jsp안에 쿼리 ,비지니스 로직, html다 들어있을떄)
+
+→ Model2 : MVC
+
+Model : 서버에서 생성된 데이터를 
+
+View : 사용자에게 보여준다 (브라우저를 통해) 즉, view에다가 model을 묻혀서 보여준다
+
+Controller : 컨트롤러를 통해서~
+
+mvc에는 비지니스개념이 없다. 모델은뭐냐 그럼? 비지니스 개념을 통해서 생성된 애들을 model에 담는거다. 그걸 view로 보여주고 controller로 구현을한다.
