@@ -1,0 +1,27 @@
+## RequestMapping
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/58131659-e88c-4c44-8a8d-901b0d07dd9b/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/380681da-cb81-428d-994d-172b88f3cb7a/Untitled.png)
+
+Controller 인터페이스를 구현한 Controller가 실행되려면 **HandlerMapping, HandlerAdapter** 두 가지가 필요하다.
+
+네모 박스 안의 매핑과 어댑터들은 Spring boot가 자동으로 등록하는 것들로, 지금 설명에 필요한 부분만 명시했다.
+
+### HandlerMapping; 핸들러 매핑
+
+- Handler Mapping에서 특정 Controller를 찾을 수 있어야 함
+- ex: Spring bean의 이름으로 Handler를 찾을 수 있는 Handler Mapping 필요
+
+```java
+0 = RequestMappingHandlerMapping// 애노테이션 기반의 컨트롤러인 @RequestMapping에서 사용1 = BeanNameUrlHandlerMapping// 스프링 빈의 이름으로 핸들러를 찾기
+```
+
+### HandlerAdapter; 핸들러 어댑터
+
+- Handler Mapping을 통해 찾은 Handler를 실행할 수 있는 Handler Adapter가 필요
+- ex: Controller 인터페이스를 실행할 수 있는 핸들러 어댑터를 찾고 실행해야 함
+
+```java
+0 = RequestMappingHandlerAdapter// 애노테이션 기반의 컨트롤러인 @RequestMapping에서 사용1 = HttpRequestHandlerAdapter// HttpRequestHandler 처리2 = SimpleControllerHandlerAdapter// Controller 인터페이스 처리
+```
