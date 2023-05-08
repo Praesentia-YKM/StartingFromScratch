@@ -1,0 +1,29 @@
+● NON-EQUI JOIN(비동등 조인)
+
+: 조인 조건이 특정 범위 내에 있는지를 조사하기 위해서 WHERE 절에 조인 조건을 = 연산자 이외의 비교 연산자를 사용한다.
+
+예1) 급여 등급을 5개로 나누어 놓은 salgrade에서 정보를 얻어와서 각 사원의 급여 등급을 조회하기
+
+SQL>select * from salgrade;
+
+GRADE           LOSAL                 HISAL
+
+- -------- ---------- -----------
+
+1                      700                    1200
+
+2                      1201                   1400
+
+3                      1401                   2000
+
+4                      2001                   3000
+
+5                      3001                   9999
+
+SQL>select e.ename, e.sal, s.grade from emp e, salgrade s where e.sal >= s.losal and e.sal <= s.hisal;
+
+- -> emp 테이블의 sal이 salgrade테이블의 losal과 hisal 조건에 맞아떨어지는 grade를 조회할 수 있도록 해준다.
+
+SQL>select e.ename, e.sal, s.grade from emp e, salgrade s where e.sal between s.losal and s.hisal;
+
+- -> 위와 같은 방법으로 between ~ and를 이용해서 조회할 수 있다.
