@@ -365,3 +365,61 @@ SELECT DEPTNO
 FROM EMP E
 GROUP BY ROLLUP(DEPTNO, TO_CHAR(HIREDATE, 'YYYY'))
 ORDER BY DEPTNO
+
+=======================================================================================================
+**서블릿이란 Dynamic Web Page를 만들 때 사용되는 자바 기반의 웹 애플리케이션 프로그래밍 기술입니다.** 웹을 만들때는 다양한 요청(Request)과 응답(Response)이 있기 마련이고 이 요청과 응답에는 규칙이 존재합니다. 이러한 요청과 응답을 일일이 처리하려면 굉장히 힘들겠죠? **서블릿은 이러한 웹 요청과 응답의 흐름을 간단한 메서드 호출만으로 체계적으로 다룰 수 있게 해주는 기술**이라고 생각하시면 이해가 빠를듯 합니다.
+
+![https://blog.kakaocdn.net/dn/bu3HKI/btq7BerRpgq/iI82e9Zf9XLSwklFLjsXpk/img.png](https://blog.kakaocdn.net/dn/bu3HKI/btq7BerRpgq/iI82e9Zf9XLSwklFLjsXpk/img.png)
+
+서블릿은 자바 클래스로 웹 애플리케이션을 작성한 뒤 이후 웹 서버 안에 있는 웹 컨테이너에서 이것을 실행하고, 웹 컨테이너에서는 서블릿 인스턴스를 생성 후 서버에서 실행되다가 웹 브라우저에서 서버에 요청(Request)을 하면 요청에 맞는 동작을 수행하고 웹 브라우저에 HTTP형식으로 응답(Response)합니다.
+
+[https://t1.daumcdn.net/cfile/tistory/991691405C90E6851A](https://t1.daumcdn.net/cfile/tistory/991691405C90E6851A)
+
+①② 사용자가 웹 브라우저를 통해 찾고 싶은 웹 페이지의 URL 주소를 입력함.
+
+③ 사용자가 입력한 URL 주소 중에서 도메인 네임(domain name) 부분을 DNS 서버에서 검색함.
+
+④ DNS 서버에서 해당 도메인 네임에 해당하는 IP 주소를 찾아 사용자가 입력한 URL 정보와 함께 전달함.
+
+⑤⑥ 웹 페이지 URL 정보와 전달받은 IP 주소는 HTTP 프로토콜을 사용하여 HTTP 요청 메시지를 생성함.
+
+이렇게 생성된 HTTP 요청 메시지는 TCP 프로토콜을 사용하여 인터넷을 거쳐 해당 IP 주소의 컴퓨터로 전송됨.
+
+⑦ 이렇게 도착한 HTTP 요청 메시지는 HTTP 프로토콜을 사용하여 웹 페이지 URL 정보로 변환됨.
+
+⑧ 웹 서버는 도착한 웹 페이지 URL 정보에 해당하는 데이터를 검색함.
+
+⑨⑩ 검색된 웹 페이지 데이터는 또 다시 HTTP 프로토콜을 사용하여 HTTP 응답 메시지를 생성함.
+
+이렇게 생성된 HTTP 응답 메시지는 TCP 프로토콜을 사용하여 인터넷을 거쳐 원래 컴퓨터로 전송됨.
+
+⑪ 도착한 HTTP 응답 메시지는 HTTP 프로토콜을 사용하여 웹 페이지 데이터로 변환됨.
+
+⑫ 변환된 웹 페이지 데이터는 웹 브라우저에 의해 출력되어 사용자가 볼 수 있게 됨.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4eebfd86-70ca-4946-8bb8-dd47023da451/Untitled.png)
+
+[서블릿 동작원리](https://hodolee246.tistory.com/73)
+
+[JSP(Java Server  Page)](https://java-is-happy-things.tistory.com/26)
+
+[Spring으로 Servlet을 다룬다는 것](https://velog.io/@guswns3371/Servlet-vs-Spring)
+
+[Spring - Servlet과 Spring의 차이!](https://jaehoney.tistory.com/307)
+
+서블릿을 배포하고 실행하려면 [웹 컨테이너를](https://en.wikipedia.org/wiki/Web_container) 사용해야 합니다. 웹 컨테이너(서블릿 컨테이너라고도 함)는 본질적으로 서블릿과 상호 작용하는 웹 서버의 구성 요소입니다. 
+웹 컨테이너는 서블릿의 수명 주기를 관리하고 URL을 특정 서블릿에 매핑하고 URL 요청자가 올바른 액세스 권한을 갖도록 하는 역할을 합니다.
+
+[Java 패키지](https://en.wikipedia.org/wiki/Java_package) 계층 구조 에 포함된 서블릿 [API는]
+(https://en.wikipedia.org/wiki/Application_programming_interface) 웹 컨테이너와 서블릿의 예상되는 상호 작용을 정의합니다. [[2]](https://en.wikipedia.org/wiki/Jakarta_Servlet#cite_note-r1-2)
+`[javax.servlet](https://javaee.github.io/javaee-spec/javadocs/javax/servlet/package-summary.html)`
+
+A 는 요청을 수신하고 해당 요청에 따라 응답을 생성하는 [객체](https://en.wikipedia.org/wiki/Object_(computer_science))`[Servlet](https://javaee.github.io/javaee-spec/javadocs/javax/servlet/Servlet.html)` 입니다 . 
+기본 서블릿 패키지는 서블릿 요청 및 응답을 나타내는 Java 개체와 서블릿의 구성 매개 변수 및 실행 환경을 반영하는 개체를 정의합니다. 이 패키지는 웹 서버와 클라이언트 간의 여러 요청과 응답을 추적하는 세션 관리 개체를 포함하여 
+일반 서블릿 요소의 [HTTP](https://en.wikipedia.org/wiki/HTTP) 관련 하위 클래스를 정의합니다 . [서블릿은 WAR 파일 에](https://en.wikipedia.org/wiki/WAR_(file_format)) [웹 애플리케이션](https://en.wikipedia.org/wiki/Web_application) 으로 패키징될 수 있습니다 .
+`[javax.servlet.http](https://javaee.github.io/javaee-spec/javadocs/javax/servlet/http/package-summary.html)`
+
+[서블릿은 Jakarta Server](https://en.wikipedia.org/wiki/Jakarta_Server_Pages) Pages 컴파일러 에 의해 JSP( [Jakarta Server Pages](https://en.wikipedia.org/wiki/Jakarta_Server_Pages_compiler) ) 에서 자동으로 생성될 수 있습니다 . 
+서블릿과 JSP의 차이점은 서블릿은 일반적으로 Java 코드 내에 HTML을 포함하는 반면 JSP는 HTML에 Java 코드를 포함한다는 것입니다. HTML을 생성하기 위해 서블릿을 직접 사용하는 경우(아래 예 참조)는 드물지만 
+Jakarta EE( [JSF](https://en.wikipedia.org/wiki/Jakarta_Server_Faces) )의 상위 수준 MVC 웹 프레임워크는 여전히 명시적으로 `[FacesServlet](https://javaee.github.io/javaee-spec/javadocs/javax/faces/webapp/FacesServlet.html)`. 
+[다소 오래된 사용법은 " 모델 2](https://en.wikipedia.org/wiki/JSP_model_2_architecture) " 라는 패턴으로 JSP와 함께 서블릿을 사용하는 것입니다 . 이것은 [모델-뷰-컨트롤러](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) 의 특징입니다 .
