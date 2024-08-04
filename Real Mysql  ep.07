@@ -1,0 +1,135 @@
+> SELECT FOR UPDATE 구문
+> 
+
+<aside>
+💡 `SELECT FOR UPDATE`의 역할
+
+- **행 잠금**: `SELECT FOR UPDATE`는 선택된 행에 대해 배타적 잠금을 설정하여, 다른 트랜잭션이 해당 행을 수정할 수 없도록 합니다. 이는 주로 다중 트랜잭션 환경에서 데이터의 일관성을 보장하기 위해 사용됩니다.
+- **사용 예시**: `SELECT FOR UPDATE`는 트랜잭션 내에서 사용할 때 유용하며, 선택된 행에 대한 잠금을 유지한 채로 여러 작업을 안전하게 수행할 수 있습니다.
+</aside>
+
+SELECT 구문의 작동방식
+
+- Non - locking consistent read : 잠금없는 일관된 읽기 → 테이블의 레코드를 읽을때 잠금없이 일관된 읽기가 가능하다. (ex. a세션에서 데이터 읽고있는데 b세션에서 데이터를 update하고 있을 때 트랜잭션으로 막히지 않는다.[동시 처리의 성능 향상을 위함])
+- 조회할때 변경 전 데이터를 undo 에 보관을 하고, 이때 다른 세션에서 이 데이터를 수정하려고 하면 mysql서버는 변경된 녀석을 보여주는게 아니고 undo영역의 녀석을 여전히 보여준다.
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/61a5c6bf-7a59-4970-897f-bce1b48b7ca4/fe10075d-0d47-4072-bad0-fc7198e2ce18/Untitled.png)
+    
+    - [ ]  다음과 같이 A가 업데이트를 날리고 COMMIT을 했음에도 B는 이전 결과를 (undo영역)을 보고있다.
+
+- mysql에서의 REPEATABLE-READ 격리수준
+    
+    Q : mysql에서 사용자 a가 어떤 테이블을 select하고 있어 이떄 사용자 b가 다른세션에서 해당 테이블에 update문을 날렸어. 그리고 commit도 했어 그리고 a가 다시 그 테이블을 select를 쳤어 이러면 변경된 사항이 조회될까 아니면 이전사항이 조회될까?
+    
+    A : MySQL에서 트랜잭션의 격리 수준에 따라, 사용자 A가 조회하는 데이터가 사용자 B에 의해 변경된 사항을 반영하는지 여부가 결정됩니다. 기본적인 MySQL의 트랜잭션 격리 수준은 **REPEATABLE READ**입니다. 각 격리 수준에서의 동작 방식은 다음과 같습니다:
+    
+    1. **READ UNCOMMITTED**:
+        - 모든 트랜잭션의 변경 사항을 실시간으로 볼 수 있습니다. 즉, 다른 사용자가 아직 커밋하지 않은 변경 사항도 조회할 수 있습니다.
+    2. **READ COMMITTED**:
+        - 트랜잭션이 커밋된 후의 데이터만 볼 수 있습니다. 사용자 A가 두 번째로 `SELECT`를 실행할 때, 사용자 B가 커밋한 변경 사항이 조회됩니다.
+    3. **REPEATABLE READ** (기본값):
+        - 하나의 트랜잭션 내에서 같은 `SELECT` 쿼리를 여러 번 실행하면, 항상 동일한 결과를 반환합니다. 즉, 사용자 A가 트랜잭션 내에서 `SELECT`를 처음 실행했을 때의 스냅샷이 유지됩니다. 따라서 사용자 A가 두 번째로 `SELECT`를 실행하더라도, 트랜잭션이 처음 시작할 때 보았던 데이터가 조회됩니다. 사용자 B의 변경 사항은 반영되지 않습니다.
+    4. **SERIALIZABLE**:
+        - 가장 엄격한 격리 수준으로, 트랜잭션이 직렬적으로 실행되도록 보장합니다. 다른 트랜잭션이 같은 테이블을 읽거나 쓸 수 없게 합니다. 이 경우에도 사용자 A는 사용자 B의 변경 사항을 볼 수 없습니다.
+    
+    ### 결론
+    
+    - **트랜잭션이 없는 경우**: MySQL에서 트랜잭션을 사용하지 않는 경우, 기본적으로 쿼리는 각 실행 시점에서 최신의 데이터를 조회합니다. 따라서 사용자 B가 커밋한 후 사용자 A가 `SELECT`를 실행하면, 변경된 사항이 반영된 결과가 조회됩니다.
+    - **트랜잭션이 있는 경우**:
+        - **READ COMMITTED** 격리 수준이라면, 사용자 A는 사용자 B가 커밋한 변경 사항을 조회할 수 있습니다.
+        - **REPEATABLE READ** (기본 격리 수준)라면, 사용자 A는 트랜잭션 내에서 처음 `SELECT`를 실행했을 때의 스냅샷을 기준으로 데이터를 조회합니다. 따라서, 두 번째 `SELECT`에서는 사용자 B의 변경 사항을 반영하지 않습니다.
+    - ex)
+        
+        MySQL의 기본 트랜잭션 격리 수준인 **REPEATABLE READ**에서는 하나의 트랜잭션 내에서 같은 `SELECT` 쿼리를 여러 번 실행하더라도, 처음 트랜잭션이 시작될 때의 데이터 스냅샷을 기준으로 결과가 반환됩니다.
+        
+        따라서, 사용자 A가 트랜잭션을 시작한 이후에 사용자 B가 데이터를 업데이트하고 커밋하더라도, 사용자 A의 트랜잭션 내에서는 이러한 변경 사항이 반영되지 않습니다. 사용자 A는 트랜잭션이 시작될 때의 데이터 상태를 계속해서 보게 됩니다.
+        
+        이러한 동작은 **REPEATABLE READ** 격리 수준의 특징으로, 트랜잭션이 시작되면 트랜잭션이 종료될 때까지 다른 트랜잭션에서 커밋된 변경 사항이 보이지 않도록 보장합니다. 이는 트랜잭션의 일관성을 유지하는 데 중요한 역할을 합니다.
+        
+        ### 예시
+        
+        1. **사용자 A**: 트랜잭션을 시작하고 데이터를 조회합니다.
+            
+            ```sql
+            sql코드 복사
+            START TRANSACTION;
+            SELECT * FROM articles WHERE id = 1;
+            
+            ```
+            
+        2. **사용자 B**: 동일한 데이터를 업데이트하고 커밋합니다.
+            
+            ```sql
+            sql코드 복사
+            UPDATE articles SET views = 500 WHERE id = 1;
+            COMMIT;
+            
+            ```
+            
+        3. **사용자 A**: 다시 동일한 데이터를 조회합니다.
+            
+            ```sql
+            sql코드 복사
+            SELECT * FROM articles WHERE id = 1;
+            
+            ```
+            
+        
+        이 시나리오에서, 사용자 A는 트랜잭션이 처음 시작될 때의 `articles` 테이블의 상태를 계속해서 보게 됩니다. 사용자 B의 변경 사항은 사용자 A의 트랜잭션이 종료된 후 새로운 트랜잭션을 시작하기 전까지는 보이지 않습니다.
+        
+        따라서, 트랜잭션 격리 수준이 **REPEATABLE READ**인 경우, 사용자 A가 같은 트랜잭션 내에서 `SELECT`를 다시 실행해도, 트랜잭션 시작 시점의 스냅샷이 유지되므로 사용자 B의 커밋된 변경 사항은 반영되지 않습니다.
+        
+        위 설정을 유지하고 a입장에서 b의 변경내역을 보고싶으면?
+        
+        자기 세션 commit해서 트랜잭션 종료하기.
+        
+        ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/61a5c6bf-7a59-4970-897f-bce1b48b7ca4/9cdfcfcc-d1f1-4f4d-9016-b9724cd729c8/Untitled.png)
+        
+    
+    > 트랜잭션 설정 확인 방법
+    > 
+    
+    ```java
+    SHOW STATUS LIKE 'innodb_trx_id';
+    -- 이 명령어는 현재 세션에서 활성화된 트랜잭션이 있는 경우 해당 트랜잭션 ID를 반환합니다.
+    
+    SELECT @@transaction_isolation;
+    -- 반환된 값이 READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE 
+    -- 중 하나라면, 해당 격리 수준에서 트랜잭션이 처리됩니다.
+    
+    ```
+    
+
+## SELECT FOR UPDATE
+
+> REPEATABLE-READ격리수준이여도 SELECT FOR UPDATE를 쓰면 격리수준에 관계없이 늘 최신 결과를 볼 수 있음.
+> 
+- [ ]  예시 1
+
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/61a5c6bf-7a59-4970-897f-bce1b48b7ca4/49682488-c0a7-4173-9603-e92f66b30a67/Untitled.png)
+
+- A사용자의 잔고에 대하여 조회하고 100이상이면 100을 깍는 로직을 실행
+- 이떄 두개의 트랜잭션에서 A가 150원이 조회됐다고 동시에 차감하는 로직이 진행되면 -100이 두번 실행됨 → 이를 막기 위해 SELECT FOR UPDATE를 제공함 [레코드의 잠금을 걸어 다른 트랜잭션에서 SELECT를 못치도록 함]
+- 아~ 사용자가 데이터를 변경하는 목적으로 SELECT를 쳤구나~라고 인지하여 LOCK을 걸어버림.
+- [AUTO COMMIT] 환경에서는 의미가 없음.
+
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/61a5c6bf-7a59-4970-897f-bce1b48b7ca4/a08c8734-f619-471d-855a-2061b876b377/Untitled.png)
+
+이러한 상황을 Lost Update Anomaly라고 부름
+
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/61a5c6bf-7a59-4970-897f-bce1b48b7ca4/899e6c61-deb2-4615-a4ca-f922937df44b/Untitled.png)
+
+## SELECT FOR SHARE
+
+### `SELECT FOR SHARE`의 역할
+
+- **공유 잠금 설정**: `SELECT FOR SHARE`는 선택된 행에 대해 공유 잠금을 설정합니다. 이 잠금은 다른 트랜잭션이 동일한 행을 읽을 수 있게 하면서도, 해당 행을 수정하는 것을 막습니다. 이는 데이터 일관성을 유지하면서 동시 읽기 접근을 허용할 때 유용합니다.
+- **읽기 전용 트랜잭션에서 사용**: 일반적으로 `SELECT FOR SHARE`는 읽기 전용 트랜잭션에서 사용되며, 여러 트랜잭션이 같은 데이터를 동시에 읽는 상황에서 데이터의 무결성을 유지하기 위해 사용됩니다.
+
+### 사용 시점
+
+- 부모테이블의 레코드 삭제 방지
+- 부모 테이블의 SELECT와 자식테이블의 INSERT 시점 사이에 , 부모 삭제 방지 차원
+- SELECT FOR SHARE 이후 UPDATE나 DEETE 가 필요한 경우에는 FOR SHARE 사용 자제 → S-lock 에서 X-lock으로 다시 변경이 되면서 Deadlock 가능성이 높아짐
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/61a5c6bf-7a59-4970-897f-bce1b48b7ca4/2591125f-a875-4040-92ec-8154a3ca5201/Untitled.png)
