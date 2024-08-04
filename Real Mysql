@@ -1,0 +1,62 @@
+- 공통점
+    - 문자열 저장용 컬럼
+    - 최대 저장 가능 문자 길이 명시(바이트 수가 아니고 몇 글자인지에 대한 표현을 함)
+
+ex) char(10), varchar(10)”
+
+## CHAR 과 VARCHAR의 특징
+
+> 넣을 수 있는 문자 용량은 문자타입에 따라 달라진다.
+> 
+> 
+> UTF-8 는 가변 길이 문자셋 → 한글 10글자면 30바이트, 영어 10글자면 10바이트…
+> 
+- [ ]  **CHAR는 미리 공간을 공백값을 넣어 예약을 한다.**
+- Latin1 문자 타입
+    - CHAR : 10글자 중 4글자를 가진다.
+    - VARCHAR : 10글자 중 4글자만 가진다.
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/61a5c6bf-7a59-4970-897f-bce1b48b7ca4/8104a1b2-5b66-4f75-8c44-746f400ee03d/Untitled.png)
+    
+- UTF-8
+    - CHAR : 한글자는 최대 4바이트를 가질 수 있음(이모티콘 문자..) 그래서 CHAR(10) → 40바이트까지  빈 공간을  “예약” 할 수 있음
+        
+        하지만 빈 공간을 예약할 때는 문자의 갯수보다는 바이트 수로 예약을 한다.
+        
+        그래서 한글 1글자 → 3바이트, 한글 2글자 → 6바이트 10 - 6 = 4 예약공간
+        
+        이때 10바이트를 초과하면 12바이트 공간 만들어주고 빈공간 안 만듬.
+        
+    - VARCHAR : 문자(한글,영어)당 바이트 수가 달라도 필요한 공간만큼 사용
+    
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/61a5c6bf-7a59-4970-897f-bce1b48b7ca4/99898b0d-402a-4bcf-942f-69a556296dd2/Untitled.png)
+    
+
+## CHAR 타입의 공간 낭비
+
+> 고정된 길의이 값 저장은 CHAR, 그 외 의 경우는 VARCHAR라고 생각 할 수 있으나, 실제로 주민번호가 13자리라고 CHAR(13), 이나 VARCHAR(13) 이나 크게 다를 게 없다.
+> 
+
+⇒ CHAR 와  VARCHAR의 가장 큰 차이는 공간을 미리 예약해두냐 아니냐의 차이다.
+
+공간을 미리 예약한다는건, 공간의 낭비가 심해진다는 뜻.
+
+!! 저장되는 값의 길이 변동이 크지 않다면 CHAR를 쓴다고 해서 낭비가 크지는 않다.
+
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/61a5c6bf-7a59-4970-897f-bce1b48b7ca4/583e1562-04d0-4237-b868-d4701fec5017/Untitled.png)
+
+## VARCHAR 와 CHAR의 컬럼 값 길이 변경시 작동되는 방식
+
+- 데이터가 자주 변하는 데이터라면 페이지 변경 조각모음 작업이 덜 필요해지는 CHAR형을 사용한다.(이미 공간을 예약해뒀기 때문에)
+
+최초 인서트한 데이터 크기에 맞게 공간을 맞추고, 길이가 변하면 새롭게 빈 공간을 만들고 기존 공간은 SOFT DELETE 처리한다.
+
+BUT!
+
+CHAR로 한다면? 컬럼을 미리 예약해두었기 때문에 예약된 공간에 맞춰 데이터를 넣는다.
+
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/61a5c6bf-7a59-4970-897f-bce1b48b7ca4/ee4e6439-833f-425b-9cc1-40b996ebf0b2/Untitled.png)
+
+## CHAR 와 VARCHAR 중 어떤 것을 사용할래?
+
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/61a5c6bf-7a59-4970-897f-bce1b48b7ca4/96c70acf-9f1d-4e53-8181-4d6a457ccca5/Untitled.png)
